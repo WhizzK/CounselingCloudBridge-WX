@@ -1,4 +1,3 @@
-// pages/User/Index/User_Index.js
 Page({
 
   /**
@@ -62,5 +61,11 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+
+  handleTapLogin() {
+    wx.navigateTo({
+      url: '/pages/User/Login/Login'
+    })
   }
 })
