@@ -1,15 +1,4 @@
 <view class="login-container">
-  <!-- 新增：登录后的用户信息预览 -->
-  <block wx:if="{{isLoggedIn}}">
-    <view class="user-preview">
-      <image class="preview-avatar" src="{{tempUserInfo.avatarUrl}}"></image>
-      <text class="preview-nickname">{{tempUserInfo.nickName}}</text>
-      <button class="logout-btn" bindtap="handleLogout">退出登录</button>
-    </view>
-  </block>
-
-  <!-- 原有登录表单（未登录时显示） -->
-  <block wx:else>
     <view class="form-wrapper">
       <view class="input-group">
         <input class="input" placeholder="请输入手机号" type="number" />
@@ -32,5 +21,4 @@
         微信登录
       </button>
     </view>
-  </block>
 </view>

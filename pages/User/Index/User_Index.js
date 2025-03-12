@@ -4,7 +4,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    isLoggedIn:false,
+    UserName:"测试用户"
   },
 
   /**
@@ -66,6 +67,11 @@ Page({
   handleTapLogin() {
     wx.navigateTo({
       url: '/pages/User/Login/Login'
+    })
+  },
+  handleTapInformation(){
+    wx.navigateTo({
+      url: '/pages/User/Information/Information'
     })
   }
 })

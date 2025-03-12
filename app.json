@@ -3,7 +3,8 @@
     "pages/Default/Index/Default_Index",
     "pages/Counseling/Index/Counseling_Index",
     "pages/User/Index/User_Index",
-    "pages/User/Login/Login"
+    "pages/User/Login/Login",
+    "pages/User/Information/Information"
   ],
   "window": {
     "navigationBarTextStyle": "black",
