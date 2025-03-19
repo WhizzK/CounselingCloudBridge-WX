@@ -73,5 +73,15 @@ Page({
     wx.navigateTo({
       url: '/pages/User/Information/Information'
     })
+  },
+  handleTapSetting(){
+    wx.navigateTo({
+      url: '/pages/User/AccountSetting/AccountSetting'
+    })
+  },
+  handleTapRecord(){
+    wx.navigateTo({
+      url: '/pages/User/CounselingRecord/CounselingRecord',
+    })
   }
 })

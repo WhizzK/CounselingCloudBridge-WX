@@ -7,8 +7,11 @@
     "pages/User/Information/Information",
     "pages/User/Register/Register",
     "pages/User/ResetPassword/ResetPassword",
+    "pages/User/AccountSetting/AccountSetting",
     "pages/Default/QuizMain/QuizMain",
-    "pages/Default/Quiz/Quiz"
+    "pages/Default/Quiz/Quiz",
+    "pages/User/CounselingRecord/CounselingRecord",
+    "pages/Default/Schedule/Schedule"
   ],
   "window": {
     "navigationBarTextStyle": "black",
