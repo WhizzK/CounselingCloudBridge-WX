@@ -4,7 +4,11 @@
     "pages/Counseling/Index/Counseling_Index",
     "pages/User/Index/User_Index",
     "pages/User/Login/Login",
-    "pages/User/Information/Information"
+    "pages/User/Information/Information",
+    "pages/User/Register/Register",
+    "pages/User/ResetPassword/ResetPassword",
+    "pages/Default/QuizMain/QuizMain",
+    "pages/Default/Quiz/Quiz"
   ],
   "window": {
     "navigationBarTextStyle": "black",

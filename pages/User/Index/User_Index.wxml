@@ -18,11 +18,6 @@
   <!-- 功能列表 -->
   <view class="function-list">
     <view class="function-item">
-      <image class="item-icon" src="/icons/预约.png"></image>
-      <text>我的预约</text>
-      <image class="arrow" src="/icons/rightArrow.png"></image>
-    </view>
-    <view class="function-item">
       <image class="item-icon" src="/icons/首页.png"></image>
       <text>咨询记录</text>
       <image class="arrow" src="/icons/rightArrow.png"></image>
