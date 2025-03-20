@@ -83,11 +83,7 @@ Page({
   // 生成模拟回复
   generateMockReply(input) {
     const replies = [
-      '能具体说说您的感受吗？',
-      '我理解您的困扰，这对您的生活有什么影响吗？',
-      '这是一个值得探讨的问题，我们可以从以下几个方面分析...',
-      '听起来您有些焦虑，这种状态持续多久了？',
-      '感谢分享，您希望在哪方面获得帮助？'
+      'nmsl'
     ];
     return replies[Math.floor(Math.random() * replies.length)];
   },
