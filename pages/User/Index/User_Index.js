@@ -4,8 +4,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isLoggedIn:false,
-    UserName:"测试用户"
+    isLoggedIn: false,
+    UserName: "测试用户"
   },
 
   /**
@@ -69,19 +69,51 @@ Page({
       url: '/pages/User/Login/Login'
     })
   },
-  handleTapInformation(){
+  handleTapInformation() {
     wx.navigateTo({
       url: '/pages/User/Information/Information'
     })
   },
-  handleTapSetting(){
-    wx.navigateTo({
-      url: '/pages/User/AccountSetting/AccountSetting'
-    })
+  handleTapSetting() {
+    if (this.data.isLoggedIn) { //后续可能需要换成缓存的
+      wx.navigateTo({
+        url: '/pages/User/AccountSetting/AccountSetting'
+      })
+    } else {
+      wx.showModal({
+        title: '未登录',
+        content: '需要登录后才能继续操作',
+        confirmText: '去登录',
+        success(res) {
+          if (res.confirm) {
+            // 用户点击了"去登录"
+            wx.navigateTo({
+              url: '/pages/User/Login/Login' // 替换为你的登录页面路径
+            })
+          }
+        }
+      })
+    }
   },
-  handleTapRecord(){
-    wx.navigateTo({
-      url: '/pages/User/CounselingRecord/CounselingRecord',
-    })
+  handleTapRecord() {
+    if (this.data.isLoggedIn) { //后续可能需要换成缓存的
+      wx.navigateTo({
+        url: '/pages/User/CounselingRecord/CounselingRecord'
+      })
+    } else {
+      wx.showModal({
+        title: '未登录',
+        content: '需要登录后才能继续操作',
+        confirmText: '去登录',
+        success(res) {
+          if (res.confirm) {
+            // 用户点击了"去登录"
+            wx.navigateTo({
+              url: '/pages/User/Login/Login' // 替换为你的登录页面路径
+            })
+          }
+        }
+      })
+    }
   }
 })
