@@ -1,0 +1,38 @@
+<!--pages/User/ChangePhone/ChangePhone.wxml-->
+<view class="container">
+  <!-- 显示当前手机号 -->
+  <view class="current-phone">
+    <text>当前手机号：{{currentPhone}}</text>
+  </view>
+
+  <!-- 输入新手机号 -->
+  <view class="input-group">
+  <text>新手机号：</text>
+    <input
+      type="number"
+      placeholder="请输入新手机号"
+      bindinput="onPhoneInput"
+      value="{{newPhone}}"
+    />
+  </view>
+
+  <!-- 验证码输入 -->
+  <view class="input-group">
+    <input
+      type="number"
+      placeholder="请输入验证码"
+      bindinput="onCodeInput"
+      value="{{verificationCode}}"
+    />
+    <button
+      class="get-code-btn"
+      bindtap="getVerificationCode"
+      disabled="{{isCodeButtonDisabled}}"
+    >
+      {{codeButtonText}}
+    </button>
+  </view>
+
+  <!-- 提交按钮 -->
+  <button class="submit-btn" bindtap="submitChange">提交</button>
+</view>

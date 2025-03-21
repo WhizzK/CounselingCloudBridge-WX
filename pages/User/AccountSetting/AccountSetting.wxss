@@ -1,1 +1,36 @@
 /* pages/User/AccountSetting/AccountSetting.wxss */
+.container {
+  padding: 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between; /* 左右两端对齐 */
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.item text {
+  font-size: 32rpx;
+  color: #333;
+  width: 320rpx;
+}
+
+.label {
+  font-size: 16px;
+  color: #333;
+}
+
+.arrow {
+  width: 20px;
+  height: 20px;
+}
+
+.modify-btn {
+  background-color: transparent;
+  border: none;
+  color: #07c160; /* 按钮颜色 */
+  font-size: 14px;
+  padding: 0;
+}
