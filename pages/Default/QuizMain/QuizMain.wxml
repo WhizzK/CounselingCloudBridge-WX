@@ -1,2 +1,14 @@
 <!--pages/QuizMain/QuizMain.wxml-->
-<text>pages/QuizMain/QuizMain.wxml</text>
+<view class="container">
+  <view class="questionnaire-list">
+    <block wx:for="{{questionnaires}}" wx:key="id">
+      <view class="questionnaire-card" bindtap="handleQuestionnaireTap" data-id="{{item.id}}">
+        <image class="questionnaire-icon" src="{{item.icon}}" mode="aspectFit"></image>
+        <view class="questionnaire-info">
+          <text class="questionnaire-title">{{item.title}}</text>
+          <text class="questionnaire-description">{{item.description}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
