@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    currentPhone: '12345612345', // 当前手机号（从接口获取）
+    currentPhone: '12345678910', // 当前手机号（从接口获取）
     newPhone: '', // 新手机号
     verificationCode: '', // 验证码
     isCodeButtonDisabled: false, // 验证码按钮是否禁用
