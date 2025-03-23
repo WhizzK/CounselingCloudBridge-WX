@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    phone: '12345612345',
+    phone: '12345678910',
     password: '******'
   },
 
@@ -27,6 +27,22 @@ Page({
   navigateToChangePassword: function() {
     wx.navigateTo({
       url: '/pages/User/ChangePassword/ChangePassword'
+    });
+  },
+
+ // 退出登录
+  handleLogout: function () {
+    wx.showModal({
+      title: '提示',
+      content: '确定要退出登录吗？',
+      success(res) {
+        if (res.confirm) {
+          // 执行退出登录逻辑
+          wx.navigateTo({
+            url: '/pages/User/Login/Login'
+          });
+        }
+      }
     });
   },
   /**
