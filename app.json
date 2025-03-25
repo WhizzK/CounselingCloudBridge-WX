@@ -13,7 +13,8 @@
     "pages/User/CounselingRecord/CounselingRecord",
     "pages/Default/Schedule/Schedule",
     "pages/User/ChangePhone/ChangePhone",
-    "pages/User/ChangePassword/ChangePassword"
+    "pages/User/ChangePassword/ChangePassword",
+    "pages/Default/Counselor_Details/Counselor_Details"
   ],
   "window": {
     "navigationBarTextStyle": "black",
