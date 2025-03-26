@@ -1,6 +1,7 @@
 /* pages/Default/Schedule/Schedule.wxss */
 .container {
     padding: 20rpx;
+    display: inline;
 }
 
 .therapist-list {
