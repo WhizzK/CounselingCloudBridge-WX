@@ -4,7 +4,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isLoggedIn: false,
+    isLoggedIn: true,
     UserName: "测试用户"
   },
 
