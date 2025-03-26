@@ -1,39 +1,73 @@
 <!--pages/User/Register/Register.wxml-->
 <view class="container">
   <form bindsubmit="onSubmit">
-      <!-- 手机号 -->
-      <view class="form-card">
-        <label class="form-label">手机号:</label>
-        <view class="input-container">
-          <input
-            name="oldPassword"
-            placeholder="请输入手机号"
-            data-name="oldPassword"
-            bindinput="onInputChange"
-          />
-        </view>
+    <!-- 手机号 -->
+    <view class="form-card">
+      <label class="form-label">手机号:</label>
+      <view class="input-container">
+        <input
+          name="phone"
+          placeholder="请输入手机号"
+          type="number"
+          maxlength="11"
+          data-name="phone"
+          bindinput="onInputChange"
+          value="{{formData.phone}}"
+        />
       </view>
+    </view>
 
-      <!-- 密码 -->
-      <view class="form-card">
-        <label class="form-label">密码:</label>
-        <view class="input-container">
-          <input
-            type="{{showNewPassword ? 'text' : 'password'}}"
-            name="newPassword"
-            placeholder="请设置密码"
-            data-name="newPassword"
-            bindinput="onInputChange"
-          />
-          <button class="toggle-button" bindtap="togglePassword" data-type="newPassword">
-            {{showNewPassword ? '隐藏' : '显示'}}
-          </button>
-        </view>
+    <!-- 验证码 -->
+    <view class="form-card">
+      <label class="form-label">验证码:</label>
+      <view class="input-container code-container">
+        <input
+          name="code"
+          placeholder="请输入验证码"
+          type="number"
+          maxlength="6"
+          data-name="code"
+          bindinput="onInputChange"
+          value="{{formData.code}}"
+        />
+        <button 
+          class="code-button" 
+          bindtap="getVerificationCode"
+          disabled="{{isCountingDown || !canGetCode}}"
+        >
+        {{countdown > 0 ? countdown + 's后重新获取' : '获取验证码'}}
+        </button>
       </view>
+    </view>
+
+    <!-- 密码 -->
+    <view class="form-card">
+      <label class="form-label">密码:</label>
+      <view class="input-container">
+        <input
+          type="{{showPassword ? 'text' : 'password'}}"
+          name="password"
+          placeholder="请设置密码"
+          data-name="password"
+          bindinput="onInputChange"
+          value="{{formData.password}}"
+        />
+        <button class="toggle-button" bindtap="togglePassword">
+          {{showPassword ? '隐藏' : '显示'}}
+        </button>
+      </view>
+    </view>
 
     <!-- 提交按钮 -->
     <view class="container">
-      <button class="submit-button" formType="submit">提交</button>
+      <button 
+        class="submit-button" 
+        formType="submit"
+        loading="{{isSubmitting}}"
+        disabled="{{isSubmitting}}"
+      >
+        {{isSubmitting ? '提交中...' : '提交'}}
+      </button>
     </view>
   </form>
 </view>
