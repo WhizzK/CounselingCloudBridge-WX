@@ -40,6 +40,63 @@
       </view>
     </view>
 
+    <!-- 真实姓名 -->
+    <view class="form-card">
+      <label class="form-label">真实姓名:</label>
+      <view class="input-container">
+        <input
+          name="realName"
+          placeholder="请输入真实姓名"
+          data-name="realName"
+          bindinput="onInputChange"
+          value="{{formData.realName}}"
+        />
+      </view>
+    </view>
+
+    <!-- 年龄 -->
+    <view class="form-card">
+      <label class="form-label">年龄:</label>
+      <view class="input-container">
+        <input
+          name="age"
+          placeholder="请输入年龄"
+          type="number"
+          min="1"
+          max="120"
+          data-name="age"
+          bindinput="onInputChange"
+          value="{{formData.age}}"
+        />
+      </view>
+    </view>
+
+    <!-- 性别 -->
+    <view class="form-card">
+      <label class="form-label">性别:</label>
+      <view class="input-container">
+        <picker mode="selector" range="{{['男', '女', '其他']}}" bindchange="onGenderChange">
+          <view class="picker">
+            {{formData.gender || '请选择性别'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 职业 -->
+    <view class="form-card">
+      <label class="form-label">职业:</label>
+      <view class="input-container">
+        <input
+          name="profession"
+          placeholder="请输入职业"
+          data-name="profession"
+          bindinput="onInputChange"
+          value="{{formData.profession}}"
+        />
+      </view>
+    </view>
+
     <!-- 密码 -->
     <view class="form-card">
       <label class="form-label">密码:</label>
@@ -82,7 +139,6 @@
         class="submit-button" 
         formType="submit"
         loading="{{isSubmitting}}"
-        disabled="{{isSubmitting || formData.password !== formData.confirmPassword}}"
       >
         {{isSubmitting ? '注册中...' : '注册'}}
       </button>

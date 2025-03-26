@@ -2,9 +2,13 @@
 Page({
   data: {
     formData: {
-      phone: '',
-      code: '',
-      password: '',
+      phone: '',         // 手机号
+      code: '',          // 验证码
+      realName: '',      // 真实姓名
+      age: '',           // 年龄
+      gender: '',        // 性别
+      profession: '',    // 职业
+      password: '',      // 密码
       confirmPassword: '' // 新增字段
     },
     showPassword: false,
@@ -28,6 +32,15 @@ Page({
         canGetCode: /^1[3-9]\d{9}$/.test(e.detail.value)
       });
     }
+  },
+
+  // 性别选择器变化时更新数据
+  onGenderChange(e) {
+    const genderIndex = e.detail.value;     // 获取选中的索引
+    const gender = ['男', '女'][genderIndex]; // 根据索引获取性别
+    this.setData({
+      'formData.gender': gender,           // 更新性别字段
+    });
   },
 
   // 切换密码可见性
@@ -96,7 +109,7 @@ Page({
 
   // 表单提交
   onSubmit(e) {
-    const { phone, code, password } = this.data.formData;
+    const { phone, code, realName, age, gender, profession, password, confirmPassword } = this.data.formData;
     
     // 表单验证
     if (!/^1[3-9]\d{9}$/.test(phone)) {
@@ -106,15 +119,27 @@ Page({
       });
       return;
     }
-    
-    if (!/^\d{6}$/.test(code)) {
-      wx.showToast({
-        title: '请输入6位验证码',
-        icon: 'none'
-      });
+
+    if (!realName.trim()) {
+      wx.showToast({ title: '请输入真实姓名', icon: 'none' });
       return;
     }
-    
+
+    if (!age || age < 1 || age > 120) {
+      wx.showToast({ title: '请输入有效的年龄', icon: 'none' });
+      return;
+    }
+
+    if (!gender) {
+      wx.showToast({ title: '请选择性别', icon: 'none' });
+      return;
+    }
+
+    if (!profession.trim()) {
+      wx.showToast({ title: '请输入职业', icon: 'none' });
+      return;
+    }
+
     if (password.length < 6) {
       wx.showToast({
         title: '密码长度不能少于6位',
@@ -126,6 +151,14 @@ Page({
     if (password !== confirmPassword) {
       wx.showToast({
         title: '两次输入的密码不一致',
+        icon: 'none'
+      });
+      return;
+    }
+
+    if (!/^\d{6}$/.test(code)) {
+      wx.showToast({
+        title: '请输入6位验证码',
         icon: 'none'
       });
       return;
