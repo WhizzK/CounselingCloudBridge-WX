@@ -58,15 +58,33 @@
       </view>
     </view>
 
+    <!-- 确认密码 -->
+    <view class="form-card">
+      <label class="form-label">确认密码:</label>
+      <view class="input-container">
+        <input
+          type="{{showConfirmPassword ? 'text' : 'password'}}"
+          name="confirmPassword"
+          placeholder="请再次输入密码"
+          data-name="confirmPassword"
+          bindinput="onInputChange"
+          value="{{formData.confirmPassword}}"
+        />
+        <button class="toggle-button" bindtap="toggleConfirmPassword">
+          {{showConfirmPassword ? '隐藏' : '显示'}}
+        </button>
+      </view>
+    </view>
+
     <!-- 提交按钮 -->
     <view class="container">
       <button 
         class="submit-button" 
         formType="submit"
         loading="{{isSubmitting}}"
-        disabled="{{isSubmitting}}"
+        disabled="{{isSubmitting || formData.password !== formData.confirmPassword}}"
       >
-        {{isSubmitting ? '提交中...' : '提交'}}
+        {{isSubmitting ? '注册中...' : '注册'}}
       </button>
     </view>
   </form>

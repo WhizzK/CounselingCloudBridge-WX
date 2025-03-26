@@ -4,9 +4,11 @@ Page({
     formData: {
       phone: '',
       code: '',
-      password: ''
+      password: '',
+      confirmPassword: '' // 新增字段
     },
     showPassword: false,
+    showConfirmPassword: false, // 新增字段
     isCountingDown: false,
     countdown: 0,
     canGetCode: false,
@@ -116,6 +118,14 @@ Page({
     if (password.length < 6) {
       wx.showToast({
         title: '密码长度不能少于6位',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    if (password !== confirmPassword) {
+      wx.showToast({
+        title: '两次输入的密码不一致',
         icon: 'none'
       });
       return;
