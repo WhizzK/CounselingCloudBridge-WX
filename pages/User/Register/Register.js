@@ -9,7 +9,8 @@ Page({
       gender: '',        // 性别
       profession: '',    // 职业
       password: '',      // 密码
-      confirmPassword: '' // 新增字段
+      confirmPassword: '', // 新增字段
+      avatar_url:'/images/用户.png'
     },
     showPassword: false,
     showConfirmPassword: false, // 新增字段
@@ -109,7 +110,7 @@ Page({
 
   // 表单提交
   onSubmit(e) {
-    const { phone, code, realName, age, gender, profession, password, confirmPassword } = this.data.formData;
+    const { phone, code, realName, age, gender, profession, password, confirmPassword, avatar_url } = this.data.formData;
     
     // 表单验证
     if (!/^1[3-9]\d{9}$/.test(phone)) {
@@ -173,7 +174,11 @@ Page({
       data: {
         phone,
         code,
-        password
+        password,
+        realName,
+        age,
+        profession,
+        avatar_url
       },
       success: (res) => {
         if (res.data.code === 0) {
