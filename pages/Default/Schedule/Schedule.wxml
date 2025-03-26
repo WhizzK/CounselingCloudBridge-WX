@@ -1,2 +1,45 @@
-<!--pages/Default/Schedule/Schedule.wxml-->
-<text>pages/Default/Schedule/Schedule.wxml</text>
+<view class="container">
+  <!-- 在container容器顶部添加筛选栏 -->
+  <view class="filter-bar">
+    <!-- 搜索框 -->
+
+    <view class="search-box">
+      <image src="/icons/搜索.png" class="search-icon"></image>
+      <input type="text" placeholder="搜索咨询师" placeholder-class="placeholder-style" bindinput="handleSearch" value="{{searchKeyword}}" />
+      <image src="/icons/close.png" class="clear-icon" wx:if="{{searchKeyword}}" bindtap="clearSearch" />
+    </view>
+    <!-- 筛选行 -->
+
+    <view class="filter-row">
+      <!-- 排序选择 -->
+      <picker class="sort-picker" value="{{sortType}}" range="{{['默认排序', '评分最高', '经验最久']}}" bindchange="handleSortChange">
+        <view class="picker-content">
+          {{sortType || '排序方式'}}
+          <image src="/icons/down_arrow.png" class="arrow-icon"></image>
+        </view>
+      </picker>
+      <!-- 状态过滤 -->
+      <view class="status-filter">
+        <text class="filter-tag {{activeStatus === 'all' ? 'active' : ''}}" bindtap="filterByStatus" data-status="all">全部</text>
+        <text class="filter-tag {{activeStatus === 'free' ? 'active' : ''}}" bindtap="filterByStatus" data-status="free">空闲</text>
+        <text class="filter-tag {{activeStatus === 'busy' ? 'active' : ''}}" bindtap="filterByStatus" data-status="busy">忙碌</text>
+      </view>
+    </view>
+  </view>
+  <view class="therapist-list">
+    <block wx:for="{{therapists}}" wx:key="id">
+      <view class="therapist-card" bindtap="navToCounselorDetail" data-id="{{item.id}}">
+        <image class="status-icon" src="{{item.isFree ? '/icons/空闲.png' : '/  icons/忙碌.png'}}" wx:if="{{item.isFree !== undefined}}"></image>
+        <image src="{{item.avatar}}" class="avatar"></image>
+        <view class="info">
+          <view class="name-rating">
+            <text class="name">{{item.name}}</text>
+            <text class="rating">⭐{{item.rating}}</text>
+          </view>
+          <text class="expertise">{{item.expertise}}</text>
+          <text class="experience">{{item.experience}}年经验</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
