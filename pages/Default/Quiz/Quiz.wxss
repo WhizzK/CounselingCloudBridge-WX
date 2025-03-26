@@ -1,5 +1,4 @@
 /* pages/Default/Quiz/Quiz.wxss */
-/* pages/anxiety-test/anxiety-test.wxss */
 .container {
   padding: 20rpx;
   background-color: #f5f5f5;
