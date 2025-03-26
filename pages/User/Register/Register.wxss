@@ -45,6 +45,25 @@
   outline: none;
 }
 
+/* 验证码相关样式 */
+.code-container {
+  position: relative;
+}
+
+.code-button {
+  padding: 10px;
+  background-color: #07c160;
+  border: none;
+  border-left: 1px solid #ddd;
+  color: #f0f0f0;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.code-button[disabled] {
+  background: #ccc;
+}
+
 /* 切换按钮 */
 .toggle-button {
   padding: 10px;

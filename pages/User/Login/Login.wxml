@@ -1,11 +1,31 @@
 <view class="login-container">
     <view class="form-wrapper">
       <view class="input-group">
-        <input class="input" placeholder="请输入手机号" type="number" bindinput="handlePhoneInput" />
-        <input class="input" placeholder="请输入密码" password bindinput="handlePasswordInput"/>
-      </view>
+    <input 
+      class="input" 
+      placeholder="请输入手机号" 
+      type="number" 
+      maxlength="11"
+      bindinput="handlePhoneInput"
+      value="{{formData.phone}}"
+    />
+    <input 
+      class="input" 
+      placeholder="请输入密码" 
+      password 
+      bindinput="handlePasswordInput"
+      value="{{formData.password}}"
+    />
+  </view>
 
-      <button class="login-btn" bindtap="mockLogin">立即登录</button>
+    <button 
+      class="login-btn" 
+      bindtap="handleLogin"
+      loading="{{isLogging}}"
+      disabled="{{isLogging}}"
+    >
+      {{isLogging ? '登录中...' : '立即登录'}}
+    </button>
       
       <view class="extra-links">
         <text class="link-text" bindtap='handleForgetPassword'>忘记密码</text>
