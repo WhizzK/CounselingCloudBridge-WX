@@ -1,4 +1,4 @@
-// pages/User/Register/Register.js
+// pages/User/ChangePassword/ChangePassword.js
 Page({
 
   /**

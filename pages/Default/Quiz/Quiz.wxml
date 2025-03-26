@@ -1,2 +1,28 @@
 <!--pages/Default/Quiz/Quiz.wxml-->
-<text>pages/Default/Quiz/Quiz.wxml</text>
+<view class="container">
+  <view class="header">
+    <view class="title">焦虑自测量表</view>
+    <view class="subtitle">以下10个问题可以帮助您了解自己的焦虑状况</view>
+  </view>
+  
+  <view class="card">
+    <view wx:for="{{questions}}" wx:key="index" class="question-item">
+      <view class="question-text">{{index + 1}}. {{item.question}}</view>
+      <radio-group class="radio-group" bindchange="radioChange" data-index="{{index}}">
+        <label wx:for="{{options}}" wx:key="value" class="radio-label">
+          <radio value="{{item.value}}" checked="{{item.value === answers[index]}}" color="#4a90e2"/>
+          <text class="option-text">{{item.label}}</text>
+        </label>
+      </radio-group>
+    </view>
+    
+    <button class="submit-btn" bindtap="submitTest" disabled="{{!isAllAnswered}}">提交测试</button>
+  </view>
+  
+  <view wx:if="{{showResult}}" class="result-card">
+    <view class="result-title">测试结果</view>
+    <view class="result-score">您的得分: {{totalScore}} / 40</view>
+    <view class="result-desc">{{resultDesc}}</view>
+    <view class="suggestion">{{suggestion}}</view>
+  </view>
+</view>

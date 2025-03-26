@@ -1,1 +1,52 @@
 /* pages/User/AccountSetting/AccountSetting.wxss */
+.container {
+  padding: 20px;
+  background-color: #fff; /* 背景色 */
+  display: inline;
+}
+
+.card {
+  background-color: #fff; /* 卡片背景色 */
+  border-radius: 10px; /* 圆角 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 阴影 */
+  margin-bottom: 10px; /* 卡片间距 */
+}
+
+.card-content {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between; /* 左右两端对齐 */
+  padding: 15px; /* 内边距 */
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px; /* 图标与文字间距 */
+}
+
+.card-text {
+  font-size: 16px;
+  color: #333;
+  flex: 1; /* 占据剩余空间 */
+}
+
+.arrow {
+  width: 20px;
+  height: 20px;
+}
+
+.modify-btn {
+  background-color: transparent;
+  border: none;
+  color: #07c160; /* 按钮颜色 */
+  font-size: 14px;
+  padding: 0;
+}
+
+.logout-text {
+  font-size: 16px;
+  color: #ff0000; /* 红色字体 */
+  flex: 1; /* 占据剩余空间 */
+  text-align: center; /* 文字居中 */
+}

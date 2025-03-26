@@ -1,2 +1,34 @@
 <!--pages/User/AccountSetting/AccountSetting.wxml-->
-<text>pages/User/AccountSetting/AccountSetting.wxml</text>
+<view class="container">
+  <!-- 修改个人信息 -->
+  <view class="card" bindtap="navigateToPersonalInfo">
+    <view class="card-content">
+      <image src="/images/用户.png" class="icon"></image>
+      <text class="card-text">修改个人信息</text>
+      <image src="/images/arrow-right.png" class="arrow"></image>
+    </view>
+  </view>
+
+  <!-- 手机号 -->
+  <view class="card">
+    <view class="card-content">
+      <text class="card-text">手机号: {{phone}}</text>
+      <button class="modify-btn" bindtap="navigateToChangePhone">修改手机号</button>
+    </view>
+  </view>
+
+  <!-- 密码 -->
+  <view class="card">
+    <view class="card-content">
+      <text class="card-text">密码: {{password}}</text>
+      <button class="modify-btn" bindtap="navigateToChangePassword">修改密码</button>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="card" bindtap="handleLogout">
+    <view class="card-content">
+      <text class="logout-text">退出登录</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,56 @@
+/* pages/User/ChangePhone/ChangePhone.wxss */
+.container {
+  padding: 20px;
+  background-color: #fff; /* 背景色 */
+  display: inline;
+}
+
+.card {
+  background-color: #fff; /* 卡片背景色 */
+  border-radius: 10px; /* 圆角 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 阴影 */
+  margin-bottom: 10px; /* 卡片间距 */
+  padding: 15px; /* 内边距 */
+}
+
+.current-phone {
+  font-size: 16px;
+  color: #333;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* 调整间距 */
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.get-code-btn {
+  width: 100px;
+  background-color: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.get-code-btn[disabled] {
+  background-color: #ccc;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
+}

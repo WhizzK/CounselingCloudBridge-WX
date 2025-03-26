@@ -1,36 +1,58 @@
 // pages/Default/Index/Default_Index.js
+// pages/index/index.js
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
-    therapists: [{
-      avatar: '/images/咨询师1.jpg',
-      name: '王心理咨询师',
-      rating: 4.9,
-      expertise: '擅长：情绪管理、亲密关系',
-      experience: 8,
-      isFree: true
-    }, {
-      avatar: '/images/咨询师2.png',
-      name: '李心理专家',
-      rating: 4.8,
-      expertise: '擅长：职场压力、焦虑缓解',
-      experience: 10,
-      isFree: true
-    }]
+    therapists: [
+      {
+        id: 1,
+        avatar: '/images/咨询师1.jpg',
+        name: '王心理咨询师',
+        rating: 4.9,
+        expertise: '擅长：情绪管理、亲密关系',
+        experience: 8,
+        isFree: true
+      }, 
+      {
+        id: 2,
+        avatar: '/images/咨询师2.png',
+        name: '李心理专家',
+        rating: 4.8,
+        expertise: '擅长：职场压力、焦虑缓解',
+        experience: 10,
+        isFree: true
+      }
+    ]
   },
 
+  // 导航到心理自测页面
   navToQuiz() {
     wx.navigateTo({
       url: '/pages/Default/QuizMain/QuizMain',
     })
   },
-  navToAIChat() {},
+  
+  // 导航到AI对话页面
+  navToAIChat() {
+    wx.navigateTo({
+      url: '/pages/Default/AIChat/AIChat',
+    })
+  },
+  
+  // 导航到排班查询页面
   navToSchedule() {
     wx.navigateTo({
       url: '/pages/Default/Schedule/Schedule',
+    })
+  },
+  
+  // 导航到咨询师详情页面
+  navToCounselorDetail(e) {
+    const counselorId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/Default/Counselor_Details/Counselor_Details?id=${counselorId}`,
     })
   },
 

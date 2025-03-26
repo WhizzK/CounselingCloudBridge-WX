@@ -1,0 +1,57 @@
+<!--pages/Default/Counselor_Details/Counselor_Details.wxml-->
+<!-- pages/consultant-detail/consultant-detail.wxml -->
+<view class="container">
+  <!-- 顶部咨询师卡片 -->
+  <view class="profile-card">
+    <view class="profile-header">
+      <image class="avatar" src="{{consultant.avatarUrl}}" mode="aspectFill"></image>
+      <view class="profile-info">
+        <view class="name">{{consultant.name}}</view>
+        <view class="title">{{consultant.title}}</view>
+        <view class="rating">
+          <text class="rating-text">评分: {{consultant.rating}}</text>
+          <van-rate value="{{consultant.rating}}" readonly size="14" color="#ffd21e" void-color="#c7c7c7"/>
+          <text class="review-count">({{consultant.reviewCount}}条评价)</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="divider"></view>
+    
+    <view class="profile-stats">
+      <view class="stat-item">
+        <text class="stat-value">{{consultant.experienceYears}}+</text>
+        <text class="stat-label">年经验</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{consultant.sessionCount}}+</text>
+        <text class="stat-label">次咨询</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{consultant.successRate}}%</text>
+        <text class="stat-label">好评率</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 专业领域卡片 -->
+  <view class="info-card">
+    <view class="card-title">专业领域</view>
+    <view class="expertise-tags">
+      <block wx:for="{{consultant.expertiseAreas}}" wx:key="index">
+        <view class="tag">{{item}}</view>
+      </block>
+    </view>
+  </view>
+  
+  <!-- 个人简介卡片 -->
+  <view class="info-card">
+    <view class="card-title">个人简介</view>
+    <view class="bio-content">{{consultant.bio}}</view>
+  </view>
+  
+  <!-- 底部固定咨询按钮 -->
+  <view class="footer">
+    <button class="consult-btn" bindtap="startConsultation">立即咨询</button>
+  </view>
+</view>

@@ -1,0 +1,207 @@
+/* pages/Default/Counselor_Details/Counselor_Details.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: 120rpx; /* 为底部按钮留出空间 */
+  display: inline;
+}
+
+/* 咨询师卡片样式 */
+.profile-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.profile-header {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  margin-right: 30rpx;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.title {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+}
+
+.rating-text {
+  font-size: 24rpx;
+  color: #666;
+  margin-right: 10rpx;
+}
+
+.review-count {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 10rpx;
+}
+
+.divider {
+  height: 1rpx;
+  background-color: #eee;
+  margin: 20rpx 0;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.stat-item {
+  flex: 1;
+}
+
+.stat-value {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #07c160;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 通用信息卡片样式 */
+.info-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.card-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8rpx;
+  height: 30rpx;
+  background-color: #07c160;
+  border-radius: 4rpx;
+}
+
+/* 专业领域标签样式 */
+.expertise-tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 10rpx 20rpx;
+  background-color: #f0f7ff;
+  color: #07c160;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  margin-right: 15rpx;
+  margin-bottom: 15rpx;
+}
+
+/* 咨询方式样式 */
+.consult-methods {
+  margin-top: 10rpx;
+}
+
+.method-item {
+  display: flex;
+  align-items: center;
+  padding: 25rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.method-item:last-child {
+  border-bottom: none;
+}
+
+.method-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 20rpx;
+}
+
+.method-info {
+  flex: 1;
+}
+
+.method-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.method-price {
+  font-size: 24rpx;
+  color: #ff6b6b;
+}
+
+.method-duration {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 个人简介样式 */
+.bio-content {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 底部咨询按钮样式 */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx;
+  background-color: #fff;
+  box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.consult-btn {
+  background-color: #07c160;
+  color: white;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  height: 90rpx;
+}

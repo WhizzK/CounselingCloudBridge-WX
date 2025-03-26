@@ -83,7 +83,7 @@ Page({
   // 生成模拟回复
   generateMockReply(input) {
     const replies = [
-      'nmsl'
+      '希腊奶'
     ];
     return replies[Math.floor(Math.random() * replies.length)];
   },

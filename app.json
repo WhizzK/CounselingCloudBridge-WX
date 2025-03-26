@@ -11,7 +11,10 @@
     "pages/Default/QuizMain/QuizMain",
     "pages/Default/Quiz/Quiz",
     "pages/User/CounselingRecord/CounselingRecord",
-    "pages/Default/Schedule/Schedule"
+    "pages/Default/Schedule/Schedule",
+    "pages/User/ChangePhone/ChangePhone",
+    "pages/User/ChangePassword/ChangePassword",
+    "pages/Default/Counselor_Details/Counselor_Details"
   ],
   "window": {
     "navigationBarTextStyle": "black",

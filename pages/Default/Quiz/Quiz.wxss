@@ -1,1 +1,121 @@
 /* pages/Default/Quiz/Quiz.wxss */
+/* pages/anxiety-test/anxiety-test.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.header {
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 26rpx;
+  color: #666;
+  margin-top: 10rpx;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.question-item {
+  margin-bottom: 40rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.question-item:last-child {
+  border-bottom: none;
+  margin-bottom: 20rpx;
+}
+
+.question-text {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+  line-height: 1.5;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio-label {
+  margin-bottom: 15rpx;
+  display: flex;
+  align-items: center;
+}
+
+.option-text {
+  font-size: 28rpx;
+  color: #555;
+  margin-left: 15rpx;
+}
+
+.submit-btn {
+  margin-top: 40rpx;
+  background-color: #4a90e2;
+  color: white;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+}
+
+.submit-btn[disabled] {
+  background-color: #ccc;
+}
+
+.result-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-top: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.result-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.result-score {
+  font-size: 32rpx;
+  color: #4a90e2;
+  text-align: center;
+  margin-bottom: 25rpx;
+  font-weight: bold;
+}
+
+.result-desc {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 15rpx;
+  line-height: 1.6;
+}
+
+.suggestion {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx dashed #eee;
+}
