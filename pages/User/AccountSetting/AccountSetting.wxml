@@ -5,7 +5,7 @@
     <view class="card-content">
       <image src="/images/用户.png" class="icon"></image>
       <text class="card-text">修改个人信息</text>
-      <image src="/images/arrow-right.png" class="arrow"></image>
+      <image src="/icons/rightArrow.png" class="arrow"></image>
     </view>
   </view>
 
