@@ -75,7 +75,7 @@
     <view class="form-card">
       <label class="form-label">性别:</label>
       <view class="input-container">
-        <picker mode="selector" range="{{['男', '女', '其他']}}" bindchange="onGenderChange">
+        <picker mode="selector" range="{{['男', '女']}}" bindchange="onGenderChange">
           <view class="picker">
             {{formData.gender || '请选择性别'}}
           </view>
