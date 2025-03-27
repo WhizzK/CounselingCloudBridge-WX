@@ -7,6 +7,7 @@
       <text class="name">{{currentConsultant.name}}</text>
       <text class="title">{{currentConsultant.title}}</text>
     </view>
+    <button class="end-btn">  结束咨询 </button>
   </view>
   <view class="no-consultant" wx:else>
     <text>当前不存在您的会话，请先预约咨询师</text>
