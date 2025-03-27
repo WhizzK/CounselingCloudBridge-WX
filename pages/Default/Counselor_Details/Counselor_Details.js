@@ -17,7 +17,6 @@ Page({
         {
           type: "咨询",
           icon: "/images/咨询.png",
-          price: 300,
           duration: 50
         }
       ],
@@ -43,14 +42,8 @@ Page({
   },
 
   startConsultation: function() {
-    wx.showActionSheet({
-      itemList: this.data.consultant.consultMethods.map(item => `${item.type} (¥${item.price})`),
-      success: (res) => {
-        const method = this.data.consultant.consultMethods[res.tapIndex];
-        wx.navigateTo({
-          url: `/pages/consultation/consultation?consultantId=${this.data.consultant.id}&method=${method.type}`
-        });
-      }
+    wx.navigateTo({
+      url: '/pages/Counseling/Index/Counseling_Index'
     });
   },
 
