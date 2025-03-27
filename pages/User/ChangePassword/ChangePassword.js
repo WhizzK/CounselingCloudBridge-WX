@@ -8,23 +8,12 @@ Page({
     oldPassword: '',
     newPassword: '',
     confirmPassword: '',
-    showOldPassword: false, // 控制旧密码显示状态
-    showNewPassword: false, // 控制新密码显示状态
-    showConfirmPassword: false // 控制确认密码显示状态
   },
 
   onInputChange: function (e) {
     const { name } = e.currentTarget.dataset;
     this.setData({
       [name]: e.detail.value
-    });
-  },
-
-  // 切换密码显示状态
-  togglePassword: function (e) {
-    const { type } = e.currentTarget.dataset;
-    this.setData({
-      [`show${type.charAt(0).toUpperCase() + type.slice(1)}`]: !this.data[`show${type.charAt(0).toUpperCase() + type.slice(1)}`]
     });
   },
   

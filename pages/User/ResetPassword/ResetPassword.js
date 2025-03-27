@@ -11,8 +11,6 @@ Page({
     isSending: false, // 是否正在发送验证码
     newPassword: '',
     confirmPassword: '',
-    showNewPassword: false, // 控制新密码显示状态
-    showConfirmPassword: false // 控制确认密码显示状态
   },
 
   // 输入框内容变化事件
@@ -49,11 +47,17 @@ Page({
     }, 2000); // 模拟2秒延迟
   },
 
-  // 切换密码显示状态
-  togglePassword: function (e) {
-    const { type } = e.currentTarget.dataset;
+  // 切换密码可见性
+  togglePassword() {
     this.setData({
-      [`show${type.charAt(0).toUpperCase() + type.slice(1)}`]: !this.data[`show${type.charAt(0).toUpperCase() + type.slice(1)}`]
+      showPassword: !this.data.showPassword
+    });
+  },
+
+  // 切换确认密码可见性
+  toggleConfirmPassword() {
+    this.setData({
+      showConfirmPassword: !this.data.showConfirmPassword
     });
   },
   
