@@ -54,4 +54,26 @@
   <view class="footer">
     <button class="consult-btn" bindtap="startConsultation">立即咨询</button>
   </view>
+
+  <!-- 在原有页面底部（container结束前）添加知情同意弹窗 -->
+<view wx:if="{{showAgreement}}" class="agreement-mask">
+  <view class="agreement-container">
+    <view class="agreement-content">
+      <view class="agreement-title">知情同意书</view>
+      <scroll-view scroll-y class="agreement-text">
+        <!-- 这里填写具体的知情同意内容 -->
+        <text>1. 心理咨询服务需要您提供真实准确的信息\n\n2. 咨询过程中双方需保持尊重与信任\n\n3. 咨询师将严格遵守保密协议（法律要求除外）\n\n4. 您有权随时终止咨询过程......</text>
+      </scroll-view>
+      <view class="checkbox-group" bindtap="toggleAgreement">
+        <checkbox checked="{{hasAgreed}}" color="#07c160" />
+        <text class="agreement-label">我已阅读并同意上述知情同意书</text>
+      </view>
+      <view class="button-group">
+        <button class="cancel-btn" bindtap="closeAgreement">取消</button>
+        <button class="confirm-btn" bindtap="handleConfirm" disabled="{{!hasAgreed}}">继续咨询</button>
+      </view>
+    </view>
+  </view>
+</view>
+
 </view>
