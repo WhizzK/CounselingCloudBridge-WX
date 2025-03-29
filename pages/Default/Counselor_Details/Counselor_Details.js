@@ -74,6 +74,7 @@ Page({
     // wx.navigateTo({
     //   url: '/pages/consultation/consultation'
     // });
+    });
   },
 
   /**
