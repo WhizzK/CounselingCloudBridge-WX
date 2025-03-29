@@ -64,17 +64,6 @@
   background: #ccc;
 }
 
-/* 切换按钮 */
-.toggle-button {
-  padding: 10px;
-  background-color: #07c160;
-  border: none;
-  border-left: 1px solid #ddd;
-  color: #f0f0f0;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
 /* 提交按钮 */
 .submit-button {
   background-color: #07c160;

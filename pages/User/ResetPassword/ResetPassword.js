@@ -5,44 +5,88 @@ Page({
    * 页面的初始数据
    */
   data: {
-    oldPassword: '',
+    phoneNumber: '',
+    captcha: '', // 用户输入的验证码
+    serverCaptcha: '', // 后端返回的验证码
+    isSending: false, // 是否正在发送验证码
     newPassword: '',
     confirmPassword: '',
-    showOldPassword: false, // 控制旧密码显示状态
-    showNewPassword: false, // 控制新密码显示状态
-    showConfirmPassword: false // 控制确认密码显示状态
   },
 
-  onInputChange: function (e) {
-    const { name } = e.currentTarget.dataset;
+  // 输入框内容变化事件
+  onInputChange(e) {
+    const name = e.currentTarget.dataset.name;
+    const value = e.detail.value;
+    this.setData({ [name]: value });
+  },
+
+  // 发送验证码
+  sendCaptcha() {
+    const { phoneNumber } = this.data;
+
+    // 校验手机号格式
+    if (!/^1[3-9]\d{9}$/.test(phoneNumber)) {
+      wx.showToast({
+        title: '请输入有效的手机号',
+        icon: 'none',
+      });
+      return;
+    }
+
+    // 模拟发送验证码到后端
+    this.setData({ isSending: true });
+    setTimeout(() => {
+      const serverCaptcha = Math.floor(100000 + Math.random() * 900000).toString(); // 生成6位随机验证码
+      this.setData({ serverCaptcha, isSending: false });
+
+      // 模拟短信发送成功提示
+      wx.showToast({
+        title: '验证码已发送',
+        icon: 'success',
+      });
+    }, 2000); // 模拟2秒延迟
+  },
+
+  // 切换密码可见性
+  togglePassword() {
     this.setData({
-      [name]: e.detail.value
+      showPassword: !this.data.showPassword
     });
   },
 
-  // 切换密码显示状态
-  togglePassword: function (e) {
-    const { type } = e.currentTarget.dataset;
+  // 切换确认密码可见性
+  toggleConfirmPassword() {
     this.setData({
-      [`show${type.charAt(0).toUpperCase() + type.slice(1)}`]: !this.data[`show${type.charAt(0).toUpperCase() + type.slice(1)}`]
+      showConfirmPassword: !this.data.showConfirmPassword
     });
   },
   
-  onSubmit: function (e) {
-    const { oldPassword, newPassword, confirmPassword } = e.detail.value;
+  // 表单提交事件
+  onSubmit(e) {
+    const { captcha, serverCaptcha, phoneNumber, newPassword, confirmPassword } = this.data;
 
-    if (!oldPassword || !newPassword || !confirmPassword) {
+    // 校验验证码
+    if (captcha !== serverCaptcha) {
       wx.showToast({
-        title: '请填写完整信息',
-        icon: 'none'
+        title: '验证码错误',
+        icon: 'none',
+      });
+      return;
+    }
+
+    // 校验其他字段
+    if (!phoneNumber || !newPassword || !confirmPassword) {
+      wx.showToast({
+        title: '请填写所有字段',
+        icon: 'none',
       });
       return;
     }
 
     if (newPassword !== confirmPassword) {
       wx.showToast({
-        title: '两次输入的新密码不一致',
-        icon: 'none'
+        title: '两次输入的密码不一致',
+        icon: 'none',
       });
       return;
     }

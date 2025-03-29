@@ -102,16 +102,14 @@
       <label class="form-label">密码:</label>
       <view class="input-container">
         <input
-          type="{{showPassword ? 'text' : 'password'}}"
-          name="password"
-          placeholder="请设置密码"
-          data-name="password"
-          bindinput="onInputChange"
+          class = "input-container input"
+          password
+          name= "password"
+          placeholder= "请设置密码"
+          data-name= "password"
+          bindinput= "onInputChange"
           value="{{formData.password}}"
         />
-        <button class="toggle-button" bindtap="togglePassword">
-          {{showPassword ? '隐藏' : '显示'}}
-        </button>
       </view>
     </view>
 
@@ -120,16 +118,14 @@
       <label class="form-label">确认密码:</label>
       <view class="input-container">
         <input
-          type="{{showConfirmPassword ? 'text' : 'password'}}"
+          class = "input-container input"
+          password
           name="confirmPassword"
           placeholder="请再次输入密码"
           data-name="confirmPassword"
           bindinput="onInputChange"
           value="{{formData.confirmPassword}}"
         />
-        <button class="toggle-button" bindtap="toggleConfirmPassword">
-          {{showConfirmPassword ? '隐藏' : '显示'}}
-        </button>
       </view>
     </view>
 

@@ -23,23 +23,6 @@ Page({
     })
   },
 
-  // 微信登录
-  getUserProfile() {
-    wx.getUserProfile({
-      desc: '用于完善会员资料',
-      success: res => {
-        this.setData({
-          tempUserInfo: res.userInfo,
-          isLoggedIn: true
-        })
-        // 存储用户信息
-        wx.setStorageSync('userInfo', res.userInfo)
-        // 1.5秒后自动返回
-        setTimeout(() => wx.navigateBack(), 1500)
-      }
-    })
-  },
-
   // 手机号登录（原有逻辑）
   // 表单验证
   validateForm() {
@@ -173,6 +156,23 @@ Page({
   handleForgetPassword(){
     wx.navigateTo({
       url: '/pages/User/ResetPassword/ResetPassword'
+    })
+  },
+
+  // 微信登录
+  getUserProfile() {
+    wx.getUserProfile({
+      desc: '用于完善会员资料',
+      success: res => {
+        this.setData({
+          tempUserInfo: res.userInfo,
+          isLoggedIn: true
+        })
+        // 存储用户信息
+        wx.setStorageSync('userInfo', res.userInfo)
+        // 1.5秒后自动返回
+        setTimeout(() => wx.navigateBack(), 1500)
+      }
     })
   },
   

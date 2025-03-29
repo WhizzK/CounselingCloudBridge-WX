@@ -19,7 +19,6 @@ Page({
         {
           type: "咨询",
           icon: "/images/咨询.png",
-          price: 300,
           duration: 50
         }
       ],
@@ -70,7 +69,6 @@ Page({
     wx.showToast({
       title: '开始咨询流程',
       icon: 'none'
-    });
     
     // 实际应该跳转到咨询页面
     // wx.navigateTo({

@@ -12,8 +12,6 @@ Page({
       confirmPassword: '', // 新增字段
       avatar_url:'/images/用户.png'
     },
-    showPassword: false,
-    showConfirmPassword: false, // 新增字段
     isCountingDown: false,
     countdown: 0,
     canGetCode: false,
@@ -26,7 +24,7 @@ Page({
     this.setData({
       [`formData.${name}`]: e.detail.value
     });
-    
+  
     // 检查是否可以获取验证码（手机号验证）
     if (name === 'phone') {
       this.setData({
@@ -48,6 +46,13 @@ Page({
   togglePassword() {
     this.setData({
       showPassword: !this.data.showPassword
+    });
+  },
+
+  // 切换确认密码可见性
+  toggleConfirmPassword() {
+    this.setData({
+      showConfirmPassword: !this.data.showConfirmPassword
     });
   },
 
