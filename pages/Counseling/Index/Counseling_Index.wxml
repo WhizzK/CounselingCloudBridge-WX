@@ -7,7 +7,7 @@
       <text class="name">{{currentConsultant.name}}</text>
       <text class="title">{{currentConsultant.title}}</text>
     </view>
-    <button class="end-btn">  结束咨询 </button>
+    <button class="end-btn" bindtap="handleEndConsult"> 结束咨询 </button>
   </view>
   <view class="no-consultant" wx:else>
     <text>当前不存在您的会话，请先预约咨询师</text>
@@ -25,14 +25,28 @@
 
   <!-- 输入区域 -->
   <view class="input-area">
-    <input 
-      class="input" 
-      value="{{inputValue}}" 
-      bindinput="onInput" 
-      placeholder="输入消息..."
-      confirm-type="send"
-      bindconfirm="sendMessage"
-    />
+    <input class="input" value="{{inputValue}}" bindinput="onInput" placeholder="输入消息..." confirm-type="send" bindconfirm="sendMessage" />
     <button class="send-btn" bindtap="sendMessage">发送</button>
+  </view>
+
+  <!-- 结束咨询确认弹窗 -->
+  <view class="confirm-modal" wx:if="{{showConfirmDialog}}">
+    <view class="modal-mask" catchtouchmove="true"></view>
+    <view class="modal-content">
+      <text class="modal-title">结束咨询前请给予评价</text>
+
+      <!-- 评分区域 -->
+      <view class="rating-container">
+        <view wx:for="{{5}}" wx:key="index" class="star" bindtap="handleRatingSelect" data-rating="{{index + 1}}">
+          <image src="{{index < rating ? '/icons/star-fill.png' : '/icons/star-empty.png'}}" class="star-icon" />
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="modal-buttons">
+        <button class="btn-cancel" bindtap="handleCancel">取消</button>
+        <button class="btn-confirm" bindtap="handleConfirmEnd">确认结束</button>
+      </view>
+    </view>
   </view>
 </view>
