@@ -205,3 +205,85 @@
   font-size: 32rpx;
   height: 90rpx;
 }
+
+/* 新增知情同意弹窗样式 */
+.agreement-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.agreement-container {
+  width: 80%;
+  max-width: 600rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.agreement-content {
+  padding: 30rpx;
+}
+
+.agreement-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20rpx;
+  color: #333;
+}
+
+.agreement-text {
+  max-height: 500rpx;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 30rpx;
+  border: 1rpx solid #eee;
+  padding: 20rpx;
+  border-radius: 8rpx;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.agreement-label {
+  font-size: 26rpx;
+  color: #666;
+  margin-left: 10rpx;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-btn {
+  flex: 1;
+  margin-right: 20rpx;
+  background: #f5f5f5;
+  color: #666;
+  border-radius: 8rpx;
+}
+
+.confirm-btn {
+  flex: 1;
+  background: #07c160;
+  color: white;
+  border-radius: 8rpx;
+}
+
+.confirm-btn[disabled] {
+  background: #c0e8d0;
+  color: #fff;
+}

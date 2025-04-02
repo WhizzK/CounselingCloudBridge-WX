@@ -2,6 +2,8 @@
 // pages/consultant-detail/consultant-detail.js
 Page({
   data: {
+    showAgreement: false,  // 控制弹窗显示
+    hasAgreed: false,      // 是否同意协议
     consultant: {
       id: 1,
       name: "张心理咨询师",
@@ -42,8 +44,36 @@ Page({
   },
 
   startConsultation: function() {
-    wx.navigateTo({
-      url: '/pages/Counseling/Index/Counseling_Index'
+    this.setData({
+      showAgreement: true,
+      hasAgreed: false
+    });
+  },
+   // 关闭弹窗
+   closeAgreement: function() {
+    this.setData({ showAgreement: false });
+  },
+
+  // 切换同意状态
+  toggleAgreement: function() {
+    this.setData({ hasAgreed: !this.data.hasAgreed });
+  },
+
+  // 确认继续咨询
+  handleConfirm: function() {
+    if (!this.data.hasAgreed) return;
+    
+    this.setData({ showAgreement: false });
+    
+    // 这里可以跳转到后续流程
+    wx.showToast({
+      title: '开始咨询流程',
+      icon: 'none'
+    
+    // 实际应该跳转到咨询页面
+    // wx.navigateTo({
+    //   url: '/pages/consultation/consultation'
+    // });
     });
   },
 
