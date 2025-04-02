@@ -1,0 +1,14 @@
+{
+  "name": "ccbwx",
+  "version": "1.0.0",
+  "description": "亻尔 女子\r 老爷爷，我来给你踩背来咯——by Dagaz84521",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "js-md5": "^0.8.3"
+  }
+}
