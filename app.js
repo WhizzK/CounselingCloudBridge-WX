@@ -14,6 +14,7 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    host : 'http://localhost:8080'
   }
 })
