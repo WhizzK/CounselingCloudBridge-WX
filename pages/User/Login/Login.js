@@ -56,7 +56,7 @@ Page({
     
     // 调用登录接口（不使用加密）
     wx.request({
-      url: 'http://localhost:8080/api/user/login',
+      url: app.globalData.host + '/api/user/login',
       method: 'POST',
       data: {
         phoneNumber: this.data.phoneNumber,
@@ -97,7 +97,7 @@ Page({
                 // 返回上一页或跳转到首页
                 setTimeout(() => {
                   wx.switchTab({
-                    url: '/pages/index/index'
+                    url: '/pages/Default/Index/Default_Index'
                   });
                 }, 1500);
               }
