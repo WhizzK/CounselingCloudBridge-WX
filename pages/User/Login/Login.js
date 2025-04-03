@@ -1,5 +1,5 @@
 const app = getApp();
-
+import md5 from '../../../utils/md5'
 Page({
   data: {
     phoneNumber: '', // 手机号
@@ -60,7 +60,7 @@ Page({
       method: 'POST',
       data: {
         phoneNumber: this.data.phoneNumber,
-        passwordHash: this.data.password // 直接发送原始密码
+        passwordHash: md5.hex(this.data.password)
       },
       header: {
         'content-type': 'application/json'
