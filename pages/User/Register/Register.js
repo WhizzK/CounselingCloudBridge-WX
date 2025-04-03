@@ -1,4 +1,6 @@
 // pages/User/Register/Register.js
+const app = getApp();
+import md5 from '../../../utils/md5'
 Page({
   data: {
     formData: {
@@ -36,7 +38,7 @@ Page({
   // 性别选择器变化时更新数据
   onGenderChange(e) {
     const genderIndex = e.detail.value;     // 获取选中的索引
-    const gender = ['男', '女'][genderIndex]; // 根据索引获取性别
+    const gender = ['male', 'female'][genderIndex]; // 根据索引获取性别
     this.setData({
       'formData.gender': gender,           // 更新性别字段
     });
@@ -172,21 +174,24 @@ Page({
     
     this.setData({ isSubmitting: true });
     
+    console.log(gender)
+
     // 调用注册API
     wx.request({
-      url: 'https://your-api-domain.com/auth/register',
+      url: app.globalData.host + '/api/user/register',
       method: 'POST',
       data: {
-        phone,
-        code,
-        password,
-        realName,
-        age,
-        profession,
-        avatar_url
+        phoneNumber : phone,
+        code : code,
+        passwordHash : md5.hex(password),
+        realName : realName,
+        gender : gender,
+        age : age,
+        occupation : profession,
+        avatarUrl : avatar_url
       },
       success: (res) => {
-        if (res.data.code === 0) {
+        if (res.data.code === 1) {
           wx.showToast({
             title: '注册成功',
             icon: 'success'
