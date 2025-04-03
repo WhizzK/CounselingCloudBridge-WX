@@ -1,23 +1,30 @@
-class ChatService {
-    constructor(config) {
+// utils/chatService.js
+const { Client } = require('stompjs');
 
-        this.config = {
-            sessionId: config.sessionId,
-            userId: config.userId,
-            brokerURL: config.brokerURL,
-            reconnectDelay: config.reconnectDelay || 5000
-        };
-        // STOMP客户端初始化
-        this.stompClient = new Client({
-            brokerURL: this.config.brokerURL,
-            reconnectDelay: this.config.reconnectDelay,
-            heartbeatIncoming: 4000,
-            heartbeatOutgoing: 4000
-        });
-        this.subscriptions = new Map();
-        this._eventListeners = new Map();
-    }
-  
+class WxChatService {
+  constructor(config) {
+    this.config = {
+      sessionId: config.sessionId,
+      userId: config.userId,
+      brokerURL: config.brokerURL,
+      reconnectDelay: config.reconnectDelay || 5000
+    };
+    
+    // 微信小程序适配的 STOMP 客户端
+    this.stompClient = new Client({
+      brokerURL: this.config.brokerURL,
+      reconnectDelay: this.config.reconnectDelay,
+      webSocketFactory: () => wx.connectSocket({
+        url: this.config.brokerURL
+      }),
+      debug: function(str) {
+        console.log('STOMP: ' + str);
+      }
+    });
+    
+    this.subscriptions = new Map();
+    this._eventListeners = new Map();
+  }
     _setupSubscriptions() {
         const createMessageHandler = (type) => (message) => {
             try {
@@ -228,7 +235,7 @@ class ChatService {
     }
 }
 module.exports = {
-    ChatService
+    WxChatService
 }
 // 使用示例
 // 配置参数示例
