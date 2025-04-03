@@ -1,5 +1,5 @@
 // utils/chatService.js
-const { Client } = require('stompjs');
+const { Client } = require('../utils/stomp');
 
 class WxChatService {
   constructor(config) {
