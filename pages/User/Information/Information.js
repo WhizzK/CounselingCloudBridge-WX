@@ -3,16 +3,50 @@ Page({
   data: {
     avatarUrl: '/images/用户.png', // 默认头像
     realName: '',
-    age: '',
-    gender: '男',
+    age: 0, // 接口要求必填，默认设为0
+    gender: '',
     occupation: '',
-    genders: ['男', '女', '其他'],
-    isSaving: false, // 防止重复提交
-    userInfo: null // 存储从服务器获取的用户信息
+    genders: ['male', 'female', 'other'],
+    isSaving: false,
+    userInfo: null,
+    tempAvatarPath: null // 临时存储选择的头像文件路径
   },
 
   onLoad() {
-    this.loadUserInfo();
+    this.checkTokenAndLoad();
+  },
+
+  // 检查token并加载数据
+  checkTokenAndLoad() {
+    try {
+      const token = wx.getStorageSync('token');
+      if (!token) {
+        this.showLoginModal();
+        return;
+      }
+      this.loadUserInfo();
+    } catch (e) {
+      console.error('获取token失败', e);
+      this.showLoginModal();
+    }
+  },
+
+  // 显示登录提示模态框
+  showLoginModal() {
+    wx.showModal({
+      title: '未登录',
+      content: '需要登录后才能查看个人信息',
+      confirmText: '去登录',
+      success: (res) => {
+        if (res.confirm) {
+          wx.navigateTo({
+            url: '/pages/User/Login/Login'
+          });
+        } else {
+          wx.navigateBack();
+        }
+      }
+    });
   },
 
   // 从服务器加载用户信息
@@ -21,202 +55,28 @@ Page({
       title: '加载中...',
       mask: true
     });
-
+    const token = wx.getStorageSync('token');
     wx.request({
-      url: 'https://your-api-domain.com/api/user/info',
+      url: 'http://localhost:8080/api/user/info',
       method: 'GET',
       header: {
-        'Authorization': `Bearer ${wx.getStorageSync('token')}`
+        'token': token,
+        'content-type': 'application/json'
       },
       success: (res) => {
-        if (res.data.code === 0 && res.data.data) {
+        if (res.statusCode === 200 && res.data.code === 1) {
           const userInfo = res.data.data;
           this.setData({
             avatarUrl: userInfo.avatarUrl || this.data.avatarUrl,
             realName: userInfo.realName || '',
-            age: userInfo.age || '',
-            gender: userInfo.gender || '男',
+            age: userInfo.age || 0,
+            gender: userInfo.gender,
             occupation: userInfo.occupation || '',
             userInfo: userInfo
           });
-        }
-      },
-      fail: (err) => {
-        wx.showToast({
-          title: '加载失败，请重试',
-          icon: 'none'
-        });
-      },
-      complete: () => {
-        wx.hideLoading();
-      }
-    });
-  },
-
-  // 选择头像并上传
-  chooseAvatar() {
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        const tempFilePath = res.tempFilePaths[0];
-        wx.showLoading({
-          title: '上传中...',
-          mask: true
-        });
-        
-        // 上传图片到服务器
-        wx.uploadFile({
-          url: 'https://your-api-domain.com/api/upload/avatar',
-          filePath: tempFilePath,
-          name: 'file',
-          header: {
-            'Authorization': `Bearer ${wx.getStorageSync('token')}`
-          },
-          success: (uploadRes) => {
-            const resData = JSON.parse(uploadRes.data);
-            if (resData.code === 0) {
-              this.setData({
-                avatarUrl: resData.data.url
-              });
-              wx.showToast({
-                title: '头像上传成功',
-                icon: 'success'
-              });
-            } else {
-              wx.showToast({
-                title: resData.message || '头像上传失败',
-                icon: 'none'
-              });
-            }
-          },
-          fail: (err) => {
-            wx.showToast({
-              title: '上传失败，请重试',
-              icon: 'none'
-            });
-          },
-          complete: () => {
-            wx.hideLoading();
-          }
-        });
-      }
-    });
-  },
-
-  // 输入真实姓名
-  inputRealName(e) {
-    this.setData({
-      realName: e.detail.value.trim()
-    });
-  },
-
-  // 输入年龄
-  inputAge(e) {
-    const value = e.detail.value.replace(/[^0-9]/g, '');
-    this.setData({
-      age: value
-    });
-  },
-
-  // 选择性别
-  changeGender(e) {
-    const index = e.detail.value;
-    this.setData({
-      gender: this.data.genders[index]
-    });
-  },
-
-  // 输入职业
-  inputOccupation(e) {
-    this.setData({
-      occupation: e.detail.value.trim()
-    });
-  },
-
-  // 验证表单数据
-  validateForm() {
-    const { realName, age, occupation } = this.data;
-    
-    if (!realName) {
-      wx.showToast({
-        title: '请输入真实姓名',
-        icon: 'none'
-      });
-      return false;
-    }
-    
-    if (realName.length < 2 || realName.length > 20) {
-      wx.showToast({
-        title: '姓名长度2-20个字符',
-        icon: 'none'
-      });
-      return false;
-    }
-    
-    if (age && (age < 1 || age > 120)) {
-      wx.showToast({
-        title: '请输入有效年龄(1-120)',
-        icon: 'none'
-      });
-      return false;
-    }
-    
-    if (occupation && occupation.length > 50) {
-      wx.showToast({
-        title: '职业长度不能超过50个字符',
-        icon: 'none'
-      });
-      return false;
-    }
-    
-    return true;
-  },
-
-  // 保存信息到服务器
-  saveInfo() {
-    if (this.data.isSaving) return;
-    if (!this.validateForm()) return;
-    
-    this.setData({ isSaving: true });
-    
-    const { avatarUrl, realName, age, gender, occupation } = this.data;
-    const data = {
-      avatarUrl,
-      realName,
-      gender,
-      occupation
-    };
-    
-    if (age) data.age = parseInt(age);
-    
-    wx.showLoading({
-      title: '保存中...',
-      mask: true
-    });
-    
-    wx.request({
-      url: 'https://your-api-domain.com/api/user/info',
-      method: 'POST',
-      header: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${wx.getStorageSync('token')}`
-      },
-      data: data,
-      success: (res) => {
-        if (res.data.code === 0) {
-          wx.showToast({
-            title: '保存成功',
-            icon: 'success'
-          });
-          // 更新本地存储
-          wx.setStorageSync('userInfo', data);
-          // 更新全局用户信息
-          getApp().globalData.userInfo = data;
         } else {
           wx.showToast({
-            title: res.data.message || '保存失败',
+            title: res.data.msg || '获取信息失败',
             icon: 'none'
           });
         }
@@ -229,9 +89,177 @@ Page({
       },
       complete: () => {
         wx.hideLoading();
-        this.setData({ isSaving: false });
       }
     });
+  },
+
+  // 选择头像
+  chooseAvatar() {
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        this.setData({
+          tempAvatarPath: res.tempFilePaths[0], // 存储临时文件路径
+          avatarUrl: res.tempFilePaths[0] // 本地预览
+        });
+      }
+    });
+  },
+
+  // 输入处理函数
+  inputRealName(e) {
+    this.setData({ realName: e.detail.value.trim() });
+  },
+
+  inputAge(e) {
+    const value = e.detail.value.replace(/[^0-9]/g, '');
+    this.setData({ age: value ? parseInt(value) : 0 });
+  },
+
+  changeGender(e) {
+    this.setData({ gender: this.data.genders[e.detail.value] });
+  },
+
+  inputOccupation(e) {
+    this.setData({ occupation: e.detail.value.trim() });
+  },
+
+  // 表单验证
+  validateForm() {
+    const { realName, age } = this.data;
+    
+    if (!realName) {
+      wx.showToast({ title: '请输入真实姓名', icon: 'none' });
+      return false;
+    }
+    
+    if (realName.length < 2 || realName.length > 20) {
+      wx.showToast({ title: '姓名长度2-20个字符', icon: 'none' });
+      return false;
+    }
+    
+    if (age < 0 || age > 120) {
+      wx.showToast({ title: '请输入有效年龄(0-120)', icon: 'none' });
+      return false;
+    }
+    
+    return true;
+  },
+
+  // 保存所有信息（使用FormData一次性提交）
+  saveInfo() {
+    if (this.data.isSaving || !this.validateForm()) return;
+    
+    this.setData({ isSaving: true });
+    wx.showLoading({ title: '保存中...', mask: true });
+
+    const { tempAvatarPath, avatarUrl, realName, age, gender, occupation } = this.data;
+
+    const token = wx.getStorageSync('token');
+    
+    if (tempAvatarPath) {
+      // 有新头像时，使用wx.uploadFile提交FormData
+      const formData = {
+        realName,
+        age,
+        gender,
+        occupation
+      };
+      
+      // 如果已有远程头像URL且没有新选择头像，则传原URL
+      if (!tempAvatarPath && avatarUrl && avatarUrl.startsWith('http')) {
+        formData.avatarUrl = avatarUrl;
+      }
+
+      wx.uploadFile({
+        url: 'http://localhost:8080/api/user/info',
+        filePath: tempAvatarPath,
+        name: 'avatar', // 文件字段名，需与后端一致
+        formData: formData,
+        header: {
+          'token': token
+        },
+        success: (res) => {
+          this.handleSaveResponse(res);
+        },
+        fail: (err) => {
+          wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+        },
+        complete: () => {
+          wx.hideLoading();
+          this.setData({ isSaving: false, tempAvatarPath: null });
+        }
+      });
+    } else {
+      // 没有新头像时，使用wx.request提交普通JSON
+      wx.request({
+        url: 'http://localhost:8080/api/user/info',
+        method: 'PUT',
+        header: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        data: {
+          avatarUrl: avatarUrl.startsWith('http') ? avatarUrl : '', // 确保有值
+          realName,
+          age,
+          gender,
+          occupation
+        },
+        success: (res) => {
+          this.handleSaveResponse(res);
+        },
+        fail: (err) => {
+          wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+        },
+        complete: () => {
+          wx.hideLoading();
+          this.setData({ isSaving: false });
+        }
+      });
+    }
+  },
+
+  // 处理保存响应
+  handleSaveResponse(res) {
+    let resData = res.data;
+    // 处理uploadFile返回的字符串数据
+    if (typeof resData === 'string') {
+      try {
+        resData = JSON.parse(resData);
+      } catch (e) {
+        console.error('解析响应数据失败', e);
+        wx.showToast({ title: '数据处理失败', icon: 'none' });
+        return;
+      }
+    }
+
+    if (res.statusCode === 200 && resData.code === 1) {
+      wx.showToast({ title: '保存成功', icon: 'success' });
+      
+      // 更新本地数据
+      const updatedInfo = {
+        ...this.data.userInfo,
+        ...resData.data,
+        avatarUrl: resData.data.avatarUrl || this.data.avatarUrl
+      };
+      
+      this.setData({
+        userInfo: updatedInfo,
+        avatarUrl: updatedInfo.avatarUrl
+      });
+      
+      // 更新存储
+      wx.setStorageSync('userInfo', updatedInfo);
+      getApp().globalData.userInfo = updatedInfo;
+    } else {
+      wx.showToast({
+        title: resData.msg || '保存失败',
+        icon: 'none'
+      });
+    }
   },
 
   /**
