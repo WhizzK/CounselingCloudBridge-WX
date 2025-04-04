@@ -1,4 +1,6 @@
 // pages/User/Information/Information.js
+const app = getApp();
+
 Page({
   data: {
     avatarUrl: '/images/用户.png', // 默认头像
@@ -57,7 +59,7 @@ Page({
     });
     const token = wx.getStorageSync('token');
     wx.request({
-      url: 'http://localhost:8080/api/user/info',
+      url: app.globalData.host + '/api/user/info',
       method: 'GET',
       header: {
         'token': token,
@@ -174,7 +176,7 @@ Page({
       }
 
       wx.uploadFile({
-        url: 'http://localhost:8080/api/user/info',
+        url: app.globalData.host + '/api/user/info',
         filePath: tempAvatarPath,
         name: 'avatar', // 文件字段名，需与后端一致
         formData: formData,
@@ -195,7 +197,7 @@ Page({
     } else {
       // 没有新头像时，使用wx.request提交普通JSON
       wx.request({
-        url: 'http://localhost:8080/api/user/info',
+        url: app.globalData.host + '/api/user/info',
         method: 'PUT',
         header: {
           'Content-Type': 'application/json',
