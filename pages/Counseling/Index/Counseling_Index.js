@@ -1,3 +1,6 @@
+const WxChatService = require('../../../utils/ChatService');
+//const { getUserId, getToken } = require('../../utils/auth');
+
 Page({
   data: {
     currentConsultant: null,
@@ -6,41 +9,109 @@ Page({
     scrollTop: 0,
     showConfirmDialog: false,
     rating: 0,
-    // 新增调试模式开关
-    debugMode: true
+    connected: false,
+    sessionId: null,
+    userId: null
   },
 
-  onLoad() {
-    this.initMockData();
+  onLoad(options) {
+    // 从路由参数或本地存储获取会话信息
+    const sessionId = options.sessionId || wx.getStorageSync('currentSessionId');
+    const userId = getUserId();
+    
+    this.setData({
+      sessionId,
+      userId
+    });
+
+    // 初始化聊天服务
+    this.initChatService();
+    this.loadConsultantInfo();
   },
 
-  // 初始化模拟数据
-  initMockData() {
-    // 尝试从本地存储加载
-    const localData = wx.getStorageSync('consultData');
-    if (localData) {
-      this.setData({
-        currentConsultant: localData.consultant,
-        messages: localData.messages
-      });
-    } else {
-      // 默认模拟数据
-      this.setData({
-        currentConsultant: {
-          avatar: '/images/咨询师1.jpg',
-          name: '王咨询师',
-          title: '国家二级心理咨询师'
-        },
-        messages: [
-          {
-            content: '您好，有什么可以帮您？',
-            isUser: false,
-            time: this.formatTime(new Date())
-          }
-        ]
-      });
-    }
+  // 初始化聊天服务
+  initChatService() {
+    this.chatService = new WxChatService({
+      sessionId: this.data.sessionId,
+      userId: this.data.userId,
+      brokerURL: 'wss://your-domain.com/ws',
+      reconnectDelay: 3000,
+      messageHandlers: {
+        onSessionMessage: this.handleSessionMessage.bind(this),
+        onErrorMessage: this.handleError.bind(this)
+      }
+    });
+
+    // 设置事件监听
+    this.chatService.on('connection_error', this.handleConnectionError.bind(this));
+    this.chatService.on('sent', this.handleMessageSent.bind(this));
+    this.chatService.on('parse_error', this.handleError.bind(this));
+
+    // 连接WebSocket
+    this.connect();
+  },
+
+  // 加载咨询师信息
+  loadConsultantInfo() {
+    wx.request({
+      url: 'https://your-api.com/api/consultant/info',
+      method: 'GET',
+      data: { sessionId: this.data.sessionId },
+      success: (res) => {
+        if (res.data.success) {
+          this.setData({
+            currentConsultant: res.data.consultant
+          });
+        }
+      }
+    });
+  },
+
+  // 连接WebSocket
+  connect() {
+    wx.showLoading({ title: '连接中...' });
+    this.chatService.connect();
+  },
+
+  // 处理收到的消息
+  handleSessionMessage(message) {
+    const newMessage = {
+      content: message.content,
+      isUser: message.meta.user_id === this.data.userId,
+      time: this.formatTime(new Date())
+    };
+
+    this.setData({
+      messages: [...this.data.messages, newMessage],
+      connected: true
+    });
+
+    wx.hideLoading();
     this.scrollToBottom();
+  },
+
+  // 处理错误
+  handleError(error) {
+    console.error('Chat error:', error);
+    wx.showToast({
+      title: error.message || '聊天错误',
+      icon: 'none'
+    });
+  },
+
+  // 处理连接错误
+  handleConnectionError(error) {
+    console.error('Connection error:', error);
+    wx.showToast({
+      title: '连接失败，正在重试...',
+      icon: 'none'
+    });
+    setTimeout(() => this.connect(), 5000);
+  },
+
+  // 处理消息发送成功
+  handleMessageSent(meta) {
+    console.log('Message sent:', meta.id);
   },
 
   // 输入处理
@@ -48,54 +119,21 @@ Page({
     this.setData({ inputValue: e.detail.value });
   },
 
-  // 发送消息（纯前端模拟）
+  // 发送消息
   sendMessage() {
     const message = this.data.inputValue.trim();
     if (!message) return;
 
-    // 生成用户消息
-    const userMsg = {
-      content: message,
-      isUser: true,
-      time: this.formatTime(new Date())
-    };
-
-    // 更新消息列表
-    this.setData({
-      messages: [...this.data.messages, userMsg],
-      inputValue: ''
-    });
-
-    // 模拟咨询师回复（1秒延迟）
-    setTimeout(() => {
-      const replyMsg = {
-        content: this.generateMockReply(message),
-        isUser: false,
-        time: this.formatTime(new Date())
-      };
-      this.setData({ messages: [...this.data.messages, replyMsg] });
-      this.saveToLocal();
-      this.scrollToBottom();
-    }, 1000);
-
-    this.saveToLocal();
-    this.scrollToBottom();
-  },
-
-  // 生成模拟回复
-  generateMockReply(input) {
-    const replies = [
-      '希腊奶'
-    ];
-    return replies[Math.floor(Math.random() * replies.length)];
-  },
-
-  // 保存到本地存储
-  saveToLocal() {
-    wx.setStorageSync('consultData', {
-      consultant: this.data.currentConsultant,
-      messages: this.data.messages
-    });
+    this.chatService.sendMessage(message)
+      .then(() => {
+        this.setData({ inputValue: '' });
+      })
+      .catch(err => {
+        wx.showToast({
+          title: '发送失败: ' + err.message,
+          icon: 'none'
+        });
+      });
   },
 
   // 点击结束按钮
@@ -116,20 +154,22 @@ Page({
       return;
     }
 
-    // 发送请求到后端
+    // 发送结束咨询请求
     wx.request({
-      url: '你的后端接口地址',
+      url: 'https://your-api.com/api/consult/end',
       method: 'POST',
       data: {
         rating: this.data.rating,
-        sessionId: '当前会话ID' // 需要根据实际情况获取
+        sessionId: this.data.sessionId
       },
       success: (res) => {
         if (res.data.success) {
-          // 清除本地会话数据
-          wx.removeStorageSync('consultData');
+          // 断开WebSocket连接
+          this.chatService.disconnect();
+          // 清除会话数据
+          wx.removeStorageSync('currentSessionId');
           wx.showToast({ title: '咨询已结束' });
-          // 返回上一页或其他操作
+          // 返回上一页
           wx.navigateBack();
         }
       },
@@ -161,9 +201,10 @@ Page({
     return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
   },
 
-  // 调试用方法：重置会话
-  resetSession() {
-    wx.removeStorageSync('consultData');
-    this.initMockData();
+  onUnload() {
+    // 页面卸载时断开连接
+    if (this.chatService) {
+      this.chatService.disconnect();
+    }
   }
 });
