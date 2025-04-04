@@ -4,15 +4,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isLoggedIn: false,
-    UserName: "测试用户"
+    UserInfo: null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    
   },
 
   /**
@@ -26,7 +25,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.setData({
+      isLoggedIn: wx.getStorageSync('isLoggedIn'),
+      UserInfo: wx.getStorageSync('userInfo') 
+    })
   },
 
   /**
@@ -75,7 +77,8 @@ Page({
     })
   },
   handleTapSetting() {
-    if (this.data.isLoggedIn) { //后续可能需要换成缓存的
+    const isLoggedIn = wx.getStorageSync('isLoggedIn')
+    if (isLoggedIn) { //后续可能需要换成缓存的
       wx.navigateTo({
         url: '/pages/User/AccountSetting/AccountSetting'
       })
@@ -88,7 +91,7 @@ Page({
           if (res.confirm) {
             // 用户点击了"去登录"
             wx.navigateTo({
-              url: '/pages/User/Login/Login' // 替换为你的登录页面路径
+              url: '/pages/User/Login/Login'
             })
           }
         }
@@ -96,7 +99,8 @@ Page({
     }
   },
   handleTapRecord() {
-    if (this.data.isLoggedIn) { //后续可能需要换成缓存的
+    const isLoggedIn = wx.getStorageSync('isLoggedIn')
+    if (isLoggedIn) { //后续可能需要换成缓存的
       wx.navigateTo({
         url: '/pages/User/CounselingRecord/CounselingRecord'
       })
