@@ -151,6 +151,16 @@
   padding: 0 20rpx;
 }
 
+.section-title {
+  text-align: center;
+  width: 100%;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  padding: 30rpx 0;
+  position: relative;
+}
+
 .status-icon {
   position: absolute;
   right: 40rpx;
@@ -158,4 +168,52 @@
   width: 60rpx;
   height: 60rpx;
   z-index: 10;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 0;
+}
+
+.loading-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0;
+  color: #999;
+}
+
+.empty-icon {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.6;
+}
+
+.retry-btn {
+  margin-top: 30rpx;
+}
+
+/* 咨询师卡片调整 */
+.therapist-card {
+  position: relative;
+}
+
+.status-icon {
+  position: absolute;
+  right: 20rpx;
+  top: 20rpx;
+  width: 40rpx;
+  height: 40rpx;
+  z-index: 2;
 }

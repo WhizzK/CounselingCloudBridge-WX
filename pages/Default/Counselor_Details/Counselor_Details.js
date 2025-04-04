@@ -1,5 +1,4 @@
 // pages/Default/Counselor_Details/Counselor_Details.js
-// pages/consultant-detail/consultant-detail.js
 Page({
   data: {
     showAgreement: false,  // 控制弹窗显示

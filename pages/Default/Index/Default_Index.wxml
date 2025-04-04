@@ -20,23 +20,48 @@
   <view class="recommend-section">
     <view class="section-header">
       <text class="section-title">推荐咨询师</text>
-      <text class="more">查看更多 ></text>
     </view>
 
-    <!-- 纵向排列的列表 -->
-    <view class="therapist-list">
+    <!-- 加载状态 -->
+    <view wx:if="{{isLoading}}" class="loading-state">
+      <image src="/icons/loading.png" mode="aspectFit" class="loading-icon"></image>
+      <text>正在加载推荐咨询师...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!isLoading && isEmpty}}" class="empty-state">
+      <image src="/icons/无数据.png" mode="aspectFit" class="empty-icon"></image>
+      <text>暂无推荐的咨询师</text>
+      <button bindtap="loadTherapistsData" size="mini" class="retry-btn">重新加载</button>
+    </view>
+
+    <!-- 数据列表 -->
+    <view wx:if="{{!isLoading && !isEmpty}}" class="therapist-list">
       <block wx:for="{{therapists}}" wx:key="id">
         <view class="therapist-card" bindtap="navToCounselorDetail" data-id="{{item.id}}">
-          <image class="status-icon" src="{{item.isFree ? '/icons/空闲.png' : '/icons/忙碌.png'}}" wx:if="{{item.isFree !== undefined}}"></image>
+          <!-- 状态图标 -->
+          <image 
+            class="status-icon" 
+            src="{{item.isFree ? '/icons/空闲.png' : '/icons/忙碌.png'}}" 
+            mode="aspectFit"
+            wx:if="{{item.isFree !== undefined}}">
+          </image>
 
-          <image src="{{item.avatar}}" class="avatar"></image>
+          <!-- 咨询师头像 -->
+          <image 
+            src="{{item.avatar || '/images/default-avatar.png'}}" 
+            class="avatar" 
+            mode="aspectFill">
+          </image>
+
+          <!-- 咨询师信息 -->
           <view class="info">
             <view class="name-rating">
-              <text class="name">{{item.name}}</text>
-              <text class="rating">⭐{{item.rating}}</text>
+              <text class="name">{{item.name || '咨询师'}}</text>
+              <text class="rating">⭐{{item.rating || '0.0'}}</text>
             </view>
-            <text class="expertise">{{item.expertise}}</text>
-            <text class="experience">{{item.experience}}年经验</text>
+            <text class="expertise">{{item.expertise || '擅长领域待补充'}}</text>
+            <text class="experience">{{item.experience || '0'}}年经验</text>
           </view>
         </view>
       </block>
