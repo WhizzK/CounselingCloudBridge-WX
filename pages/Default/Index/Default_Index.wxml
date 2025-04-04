@@ -40,18 +40,13 @@
       <block wx:for="{{therapists}}" wx:key="id">
         <view class="therapist-card" bindtap="navToCounselorDetail" data-id="{{item.id}}">
           <!-- 状态图标 -->
-          <image 
-            class="status-icon" 
-            src="{{item.isFree ? '/icons/空闲.png' : '/icons/忙碌.png'}}" 
-            mode="aspectFit"
-            wx:if="{{item.isFree !== undefined}}">
-          </image>
+          <view class="status-container">
+            <image class="status-icon" src="{{item.isFree ? '/icons/空闲.png' : '/icons/忙碌.png'}}" mode="aspectFit" wx:if="{{item.isFree !== undefined}}">
+            </image>
+          </view>
 
           <!-- 咨询师头像 -->
-          <image 
-            src="{{item.avatar || '/images/default-avatar.png'}}" 
-            class="avatar" 
-            mode="aspectFill">
+          <image src="{{item.avatar || '/images/default-avatar.png'}}" class="avatar" mode="aspectFill">
           </image>
 
           <!-- 咨询师信息 -->

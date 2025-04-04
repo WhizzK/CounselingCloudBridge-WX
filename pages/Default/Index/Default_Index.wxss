@@ -23,6 +23,11 @@
   margin-bottom: 15rpx;
 }
 
+.recommend-section {
+  display: inline;
+  width: 100%;
+}
+
 /* 推荐咨询师区域 */
 .therapist-list {
   display: block; /* 确保为块级布局 */
@@ -165,8 +170,8 @@
   position: absolute;
   right: 40rpx;
   bottom: 40rpx;
-  width: 60rpx;
-  height: 60rpx;
+  width: 10rpx;
+  height: 10rpx;
   z-index: 10;
 }
 
@@ -209,11 +214,17 @@
   position: relative;
 }
 
-.status-icon {
+.status-container {
   position: absolute;
-  right: 20rpx;
-  top: 20rpx;
+  right: 10rpx;
+  bottom: 10rpx;
   width: 40rpx;
   height: 40rpx;
   z-index: 2;
+}
+
+.status-icon{
+  width: 100%;
+  height: 100%;
+  display: block;
 }
