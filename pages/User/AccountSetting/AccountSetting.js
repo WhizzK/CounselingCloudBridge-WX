@@ -37,9 +37,12 @@ Page({
       content: '确定要退出登录吗？',
       success(res) {
         if (res.confirm) {
+          wx.setStorageSync('userInfo', null)
+          wx.setStorageSync('isLoggedIn', false)
+          wx.setStorageSync('token', '')
           // 执行退出登录逻辑
-          wx.navigateTo({
-            url: '/pages/User/Login/Login'
+          wx.switchTab({
+            url: '/pages/Default/Index/Default_Index',
           });
         }
       }

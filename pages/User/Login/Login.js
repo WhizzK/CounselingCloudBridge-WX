@@ -65,7 +65,7 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: (res) => {
+      success: async (res) => {
         wx.hideLoading();
         this.setData({ isLoading: false });
         
@@ -80,14 +80,19 @@ Page({
               userType,
               token
             };
-            
+
+            app.globalData.isLoggedIn = true;
+
             try {
               wx.setStorageSync('userInfo', app.globalData.userInfo);
               wx.setStorageSync('token', token);
+              wx.setStorageSync('isLoggedIn', true);
             } catch (e) {
               console.error('存储用户信息失败', e);
             }
             
+            await this.getUserInfo(token)
+
             // 登录成功提示
             wx.showToast({
               title: '登录成功',
@@ -127,6 +132,32 @@ Page({
         console.error('登录请求失败', err);
       }
     });
+  },
+
+  getUserInfo: function(token) {
+    return new Promise((resolve) => {
+      wx.request({
+        url: app.globalData.host + '/api/user/info',
+        method: 'GET',
+        header: { 
+          'token' : getApp().globalData.userInfo.token,
+          'content-type': 'application/json'
+        },
+        success: (res) => {
+          if (res.statusCode === 200 && res.data.code === 1) {
+            const app = getApp()
+            // 合并用户信息
+            app.globalData.userInfo = { 
+              ...app.globalData.userInfo,
+              ...res.data.data
+            }
+            wx.setStorageSync('userInfo', app.globalData.userInfo)
+          }
+          resolve()
+        },
+        fail: () => resolve()
+      })
+    })
   },
 
   handleRegister(){
