@@ -4,7 +4,7 @@
   <block wx:if="{{isLoggedIn}}">
     <view class="user-header" bindtap="handleTapInformation">
       <image class="avatar" src="/images/用户.png"></image>
-      <text class="nickname">{{UserName}}</text>
+      <text class="nickname">{{UserInfo.realName}}</text>
     </view>
   </block>
   <block wx:else>
