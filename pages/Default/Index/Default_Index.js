@@ -119,7 +119,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    // 从登录页跳转回来时会触发
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 });
+    }
+    this.loadTherapistsData();
   },
 
   /**
