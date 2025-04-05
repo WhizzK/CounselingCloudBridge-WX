@@ -2,19 +2,17 @@
   <!-- 在container容器顶部添加筛选栏 -->
   <view class="filter-bar">
     <!-- 搜索框 -->
-
     <view class="search-box">
       <image src="/icons/搜索.png" class="search-icon"></image>
       <input type="text" placeholder="搜索咨询师" placeholder-class="placeholder-style" bindinput="handleSearch" value="{{searchKeyword}}" />
       <image src="/icons/close.png" class="clear-icon" wx:if="{{searchKeyword}}" bindtap="clearSearch" />
     </view>
     <!-- 筛选行 -->
-
     <view class="filter-row">
       <!-- 排序选择 -->
-      <picker class="sort-picker" value="{{sortType}}" range="{{['默认排序', '评分最高', '经验最久']}}" bindchange="handleSortChange">
+      <picker class="sort-picker" value="{{sortType === 'rating' ? 1 : 0}}" range="{{['默认排序', '评分最高']}}" bindchange="handleSortChange">
         <view class="picker-content">
-          {{sortType || '排序方式'}}
+          {{sortType === 'rating' ? '评分最高' : '默认排序'}}
           <image src="/icons/down_arrow.png" class="arrow-icon"></image>
         </view>
       </picker>
@@ -26,14 +24,16 @@
       </view>
     </view>
   </view>
+  
+  <!-- 咨询师列表 -->
   <view class="therapist-list">
     <block wx:for="{{therapists}}" wx:key="id">
       <view class="therapist-card" bindtap="navToCounselorDetail" data-id="{{item.id}}">
-        <image class="status-icon" src="{{item.isFree ? '/icons/空闲.png' : '/  icons/忙碌.png'}}" wx:if="{{item.isFree !== undefined}}"></image>
-        <image src="{{item.avatar}}" class="avatar"></image>
+        <image class="status-icon" src="{{item.isFree ? '/icons/空闲.png' : '/icons/忙碌.png'}}"></image>
+        <image src="{{item.avatarUrl}}" class="avatar" mode="aspectFill"></image>
         <view class="info">
           <view class="name-rating">
-            <text class="name">{{item.name}}</text>
+            <text class="name">{{item.realName}}</text>
             <text class="rating">⭐{{item.rating}}</text>
           </view>
           <text class="expertise">{{item.expertise}}</text>
@@ -41,5 +41,22 @@
         </view>
       </view>
     </block>
+    
+    <!-- 加载状态提示 -->
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading-content">
+        <text>加载中...</text>
+      </view>
+    </view>
+    <view wx:if="{{noMoreData && therapists.length > 0}}" class="loading-container">
+      <view class="loading-content">
+        <text>没有更多数据了</text>
+      </view>
+    </view>
+    <view wx:if="{{!loading && therapists.length === 0}}" class="loading-container">
+      <view class="loading-content">
+        <text>暂无咨询师数据</text>
+    </view>
+    </view>
   </view>
 </view>

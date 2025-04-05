@@ -1,36 +1,18 @@
 // pages/Default/Schedule/Schedule.js
+const app = getApp();
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     searchKeyword: '',
     sortType: '',
-    activeStatus: 'all',
-    // ...其他原有数据
-    therapists: [
-      {
-        id: 1,
-        avatar: '/images/咨询师1.jpg',
-        name: '王心理咨询师',
-        rating: 4.9,
-        expertise: '擅长：情绪管理、亲密关系',
-        experience: 8,
-        isFree: true
-      },
-      {
-        id: 2,
-        avatar: '/images/咨询师2.png',
-        name: '李心理专家',
-        rating: 4.8,
-        expertise: '擅长：职场压力、焦虑缓解',
-        experience: 10,
-        isFree: true
-      }
-    ]
+    activeStatus: 'busy',
+    therapists: [],
+    page: 1,
+    pagesize: 5,
+    loading: false,
+    noMoreData: false
   },
 
+  // 导航到咨询师详情页
   navToCounselorDetail(e) {
     const counselorId = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -38,91 +20,127 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad(options) {
-
-  },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+    this.loadTherapists();
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  // 加载咨询师数据
+  loadTherapists() {
+    if (this.data.loading || this.data.noMoreData) return;
+    
+    this.setData({ loading: true });
+    
+    const { searchKeyword, sortType, activeStatus, page, pagesize } = this.data;
+    const token = wx.getStorageSync('token');
+    
+    wx.request({
+      url: app.globalData.host + '/api/client/counselor',
+      method: 'GET',
+      header: {
+        'token': token,
+        'content-type': 'application/json'
+      },
+      data: {
+        name: searchKeyword || '', // 必填，空字符串代替undefined
+        sortord: sortType === '' ? '' : sortType, // 必填，默认传空字符串
+        isFree: activeStatus === 'all' ? 2 : 
+               (activeStatus === 'free' ? 1 : 0), // 严格按文档映射
+        page: page,
+        pagesize: pagesize // 修正参数名拼写
+      },
+      success: (res) => {
+        console.log('最终请求参数:', {
+          name: searchKeyword,
+          sortord: sortType,
+          isFree: activeStatus,
+          page: page,
+          pagesize: pagesize
+        });
+        if (res.data.code === 1) {
+          console.log(res.data.data);
+          const newData = res.data?.data || []; // 注意数据结构变化
+          const Therapists = page === 1 ? newData : [...this.data.therapists, ...newData];
+          console.log(res.data);
+          this.setData({
+            therapists: Therapists,
+            noMoreData: newData.length < pagesize
+          });
+        } else {
+          wx.showToast({
+            title: res.data.msg || '加载失败', // 显示后端返回的错误信息
+            icon: 'none'
+          });
+        }
+      },
+      fail: (err) => {
+        wx.showToast({
+          title: err.errMsg || '网络错误',
+          icon: 'none'
+        });
+        this.setData({ loading: false });
+      },
+      complete: () => {
+        wx.stopPullDownRefresh();
+        this.setData({loading: false});
+      }
+    });
   },
 
   // 搜索处理
   handleSearch(e) {
-    this.setData({ searchKeyword: e.detail.value });
-    this.filterTherapists();
+    this.setData({ 
+      searchKeyword: e.detail.value,
+      page: 1
+    }, () => {
+      this.loadTherapists();
+    });
   },
 
   // 清空搜索
   clearSearch() {
-    this.setData({ searchKeyword: '' });
-    this.filterTherapists();
+    this.setData({ 
+      searchKeyword: '',
+      page: 1
+    }, () => {
+      this.loadTherapists();
+    });
   },
 
   // 排序处理
   handleSortChange(e) {
-    const sortType = ['default', 'rating', 'experience'][e.detail.value];
-    this.setData({ sortType });
-    this.filterTherapists();
+    const sortType = ['default', 'rating'][e.detail.value];
+    this.setData({ 
+      sortType,
+      page: 1
+    }, () => {
+      this.loadTherapists();
+    });
   },
 
   // 状态过滤
   filterByStatus(e) {
     const status = e.currentTarget.dataset.status;
-    this.setData({ activeStatus: status });
-    this.filterTherapists();
+    this.setData({ 
+      activeStatus: status,
+      page: 1
+    });
+    console.log('setData');
+    this.loadTherapists();
   },
 
-  // 综合过滤方法
-  filterTherapists() {
-    // 这里需要实现具体的过滤逻辑
-    // 根据searchKeyword、sortType、activeStatus过滤原始数据
-    // 更新therapists数据
+  // 下拉刷新
+  onPullDownRefresh() {
+    this.setData({ page: 1 }, () => {
+      this.loadTherapists();
+    });
+  },
+
+  // 上拉加载更多
+  onReachBottom() {
+    if (!this.data.noMoreData) {
+      this.setData({ page: this.data.page + 1 }, () => {
+        this.loadTherapists();
+      });
+    }
   }
-})
+});
