@@ -54,7 +54,7 @@ Page({
   // 加载咨询师信息
   loadConsultantInfo() {
     wx.request({
-      url: 'https://your-api.com/api/consultant/info',
+      url: app.globalData.host + '/api/client/session',
       method: 'GET',
       data: { sessionId: this.data.sessionId },
       success: (res) => {
