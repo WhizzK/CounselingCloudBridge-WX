@@ -4,7 +4,7 @@ Page({
   data: {
     searchKeyword: '',
     sortType: '',
-    activeStatus: 'busy',
+    activeStatus: 'all',
     therapists: [],
     page: 1,
     pagesize: 5,
@@ -49,16 +49,11 @@ Page({
         pagesize: pagesize // 修正参数名拼写
       },
       success: (res) => {
-        console.log('最终请求参数:', {
-          name: searchKeyword,
-          sortord: sortType,
-          isFree: activeStatus,
-          page: page,
-          pagesize: pagesize
-        });
         if (res.data.code === 1) {
-          console.log(res.data.data);
           const newData = res.data?.data || []; // 注意数据结构变化
+          newData.forEach(counselor => {
+            wx.setStorageSync(`counselor_${counselor.counselorId}`, counselor);
+          });
           const Therapists = page === 1 ? newData : [...this.data.therapists, ...newData];
           console.log(res.data);
           this.setData({
