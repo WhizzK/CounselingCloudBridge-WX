@@ -3,25 +3,7 @@ Page({
   data: {
     showAgreement: false,  // 控制弹窗显示
     hasAgreed: false,      // 是否同意协议
-    consultant: {
-      id: 1,
-      name: "张心理咨询师",
-      title: "国家二级心理咨询师",
-      avatarUrl: "/images/咨询师1.jpg",
-      rating: 4.9,
-      reviewCount: 128,
-      experienceYears: 8,
-      sessionCount: 1200,
-      successRate: 98,
-      expertiseAreas: ["情绪管理","亲密关系"],
-      consultMethods: [
-        {
-          type: "咨询",
-          icon: "/images/咨询.png",
-          duration: 50
-        }
-      ],
-      bio: "心理学硕士，国家二级心理咨询师，8年心理咨询经验。擅长认知行为疗法(CBT)和接纳承诺疗法(ACT)，帮助来访者解决情绪困扰、人际关系问题和自我成长困惑。相信每个人都有自我成长和改变的能力，咨询风格温暖而有力，注重建立信任的咨询关系。"
+    counselor: {
     }
   },
 
@@ -80,7 +62,18 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    const counselorId = options.id;
+    console.log(counselorId);
+    // 从缓存读取
+    const cachedData = wx.getStorageSync(`counselor_${counselorId}`);
+    console.log(cachedData);
+    if (cachedData) {
+      this.setData({ counselor: cachedData });
+      console.log(this.data.counselor);
+    } else {
+      // 缓存不存在时调用 API 获取
+      this.fetchCounselorDetail(counselorId);
+    }
   },
 
   /**

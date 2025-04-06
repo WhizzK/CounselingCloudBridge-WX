@@ -1,34 +1,34 @@
 <!--pages/Default/Counselor_Details/Counselor_Details.wxml-->
-<!-- pages/consultant-detail/consultant-detail.wxml -->
+<!-- pages/counselor-detail/counselor-detail.wxml -->
 <view class="container">
   <!-- 顶部咨询师卡片 -->
   <view class="profile-card">
     <view class="profile-header">
-      <image class="avatar" src="{{consultant.avatarUrl}}" mode="aspectFill"></image>
+      <image class="avatar" src="{{counselor.avatarUrl}}" mode="aspectFill"></image>
       <view class="profile-info">
-        <view class="name">{{consultant.name}}</view>
-        <view class="title">{{consultant.title}}</view>
+        <view class="name">{{counselor.realName}}</view>
+        <!-- <view class="title">{{counselor.title}}</view>
         <view class="rating">
-          <text class="rating-text">评分: {{consultant.rating}}</text>
-          <van-rate value="{{consultant.rating}}" readonly size="14" color="#ffd21e" void-color="#c7c7c7"/>
-          <text class="review-count">({{consultant.reviewCount}}条评价)</text>
-        </view>
+          <text class="rating-text">评分: {{counselor.rating}}</text>
+          <van-rate value="{{counselor.rating}}" readonly size="14" color="#ffd21e" void-color="#c7c7c7"/>
+          <text class="review-count">({{counselor.reviewCount}}条评价)</text>
+        </view> -->
       </view>
     </view>
     
     <view class="divider"></view>
     
     <view class="profile-stats">
-      <view class="stat-item">
-        <text class="stat-value">{{consultant.experienceYears}}+</text>
+      <!-- <view class="stat-item">
+        <text class="stat-value">{{counselor.experienceYears}}+</text>
         <text class="stat-label">年经验</text>
-      </view>
+      </view> -->
       <view class="stat-item">
-        <text class="stat-value">{{consultant.sessionCount}}+</text>
+        <text class="stat-value">{{counselor.sessionCount}}+</text>
         <text class="stat-label">次咨询</text>
       </view>
       <view class="stat-item">
-        <text class="stat-value">{{consultant.successRate}}%</text>
+        <text class="stat-value">{{counselor.rating * 20}}%</text>
         <text class="stat-label">好评率</text>
       </view>
     </view>
@@ -38,17 +38,15 @@
   <view class="info-card">
     <view class="card-title">专业领域</view>
     <view class="expertise-tags">
-      <block wx:for="{{consultant.expertiseAreas}}" wx:key="index">
-        <view class="tag">{{item}}</view>
-      </block>
+      <text class="tag">{{counselor.expertise}}</text>
     </view>
   </view>
   
   <!-- 个人简介卡片 -->
-  <view class="info-card">
+  <!-- <view class="info-card">
     <view class="card-title">个人简介</view>
-    <view class="bio-content">{{consultant.bio}}</view>
-  </view>
+    <view class="bio-content">{{counselor.bio}}</view>
+  </view> -->
   
   <!-- 底部固定咨询按钮 -->
   <view class="footer">

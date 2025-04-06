@@ -28,7 +28,7 @@
   <!-- 咨询师列表 -->
   <view class="therapist-list">
     <block wx:for="{{therapists}}" wx:key="id">
-      <view class="therapist-card" bindtap="navToCounselorDetail" data-id="{{item.id}}">
+      <view class="therapist-card" bindtap="navToCounselorDetail" data-id="{{item.counselorId}}">
         <image class="status-icon" src="{{item.isFree ? '/icons/空闲.png' : '/icons/忙碌.png'}}"></image>
         <image src="{{item.avatarUrl}}" class="avatar" mode="aspectFill"></image>
         <view class="info">
