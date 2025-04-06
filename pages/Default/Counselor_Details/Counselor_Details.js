@@ -52,6 +52,7 @@ Page({
     console.log(clientId);
     const counselorId = this.data.counselor.counselorId;
     console.log(counselorId);
+    var sessionId = 0;
     wx.request({
       url: host + '/api/client/session/add',
       method: 'POST',
@@ -61,19 +62,22 @@ Page({
       },
       data: `clientId=${clientId}&counselorId=${counselorId}`,
       success: async(res) =>{
-        console.log(res);
+        console.log(res.data);
+        //实际应该跳转到咨询页面
+        wx.setStorageSync('currentSessionId', res.data.data);
+        sessionId = res.data.data;
+        wx.switchTab({
+          url: `/pages/Counseling/Index/Counseling_Index?sessionId=${sessionId}`,
+        });
       }
     })
-
+    
     // 这里可以跳转到后续流程
     // wx.showToast({
     //   title: '开始咨询流程',
     //   icon: 'none'
     
-    // 实际应该跳转到咨询页面
-    // wx.navigateTo({
-    //   url: '/pages/consultation/consultation'
-    // });
+    
     // });
   },
 
