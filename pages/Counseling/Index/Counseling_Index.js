@@ -49,6 +49,15 @@ Page({
 
   // 加载咨询师信息
   loadConsultantInfo() {
+    // 从本地缓存
+    //   const currentCounselorId = wx.getStorageSync('currentCounselorId');
+    //   console.log(currentCounselorId);
+    //   const currentConsultant = wx.getStorageSync(`counselor_${currentCounselorId}`);
+    //   console.log(currentConsultant);
+    //  this.setData({
+    //    currentConsultant: currentConsultant
+    //  });
+
     const token = wx.getStorageSync('token');
     // 从后端获取
     wx.request({
