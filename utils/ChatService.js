@@ -125,5 +125,5 @@ class ChatService {
   // //发送消息
   // sessionManager.send(sessionId,receiverId,content);
 module.exports = {
-  SessionMessagingSystem
+  ChatService
 }
