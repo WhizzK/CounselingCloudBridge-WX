@@ -2,10 +2,10 @@
 <view class="container">
   <!-- 咨询师信息区域 -->
   <view class="consultant-info" wx:if="{{currentConsultant}}">
-    <image class="avatar" src="{{currentConsultant.avatar}}"></image>
+    <image class="avatar" src="{{currentConsultant.avatarUrl}}"></image>
     <view class="info">
-      <text class="name">{{currentConsultant.name}}</text>
-      <text class="title">{{currentConsultant.title}}</text>
+      <text class="name">{{currentConsultant.realName}}</text>
+      <!-- <text class="title">{{currentConsultant.title}}</text> -->
     </view>
     <button class="end-btn" bindtap="handleEndConsult">结束咨询</button>
   </view>

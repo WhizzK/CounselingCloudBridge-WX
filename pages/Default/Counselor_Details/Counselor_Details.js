@@ -65,9 +65,10 @@ Page({
         console.log(res.data);
         //实际应该跳转到咨询页面
         wx.setStorageSync('currentSessionId', res.data.data);
+        wx.setStorageSync('currentCounselorId', counselorId);
         sessionId = res.data.data;
         wx.switchTab({
-          url: `/pages/Counseling/Index/Counseling_Index?sessionId=${sessionId}`,
+          url: `/pages/Counseling/Index/Counseling_Index?sessionId=${sessionId}?counselorId=${counselorId}`,
         });
       }
     })
