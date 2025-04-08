@@ -216,6 +216,12 @@ Page({
     }
     const token = wx.getStorageSync('token');
     console.log(this.data.sessionId);
+
+    // 新增：标记为主动关闭
+  if (this.chatService) {
+    this.chatService.destroy(); // 这会设置 _isManualClose = true
+  }
+  
     // 发送请求到后端
     wx.request({
       url: host + '/api/client/session/end',
@@ -226,12 +232,15 @@ Page({
       },
       data: `sessionId=${this.data.sessionId}&rating=${this.data.rating}`,
       success: (res) => {
-        if (res.data.success) {
+
+        if (res.statusCode === 200 && res.data.code === 1) {
           // 清除本地会话数据
           wx.removeStorageSync('consultData');
           wx.showToast({ title: '咨询已结束' });
           // 返回上一页或其他操作
-          wx.navigateBack();
+          wx.switchTab({
+            url: '/pages/Default/Index/Default_Index',
+          })
         }
       },
       fail: () => {
