@@ -21,8 +21,8 @@ Page({
     console.log('onLoad');
     const sessionId = options.sessionId || wx.getStorageSync('currentSessionId');
     console.log('Initial sessionId:', sessionId); // 验证存储值
-    const userId = wx.getStorageSync('userInfo').userId;
     const counselorId = options.counselorId || wx.getStorageSync('currentCounselorId');
+    const userId = wx.getStorageSync('userInfo').userId;
 
     // 初始化ChatService
     this.chatService = new ChatService(userId);
@@ -45,7 +45,32 @@ Page({
   },
 
   onShow() {
+    // 从路由参数或本地存储获取会话信息
+    console.log('onShow');
+    const sessionId = wx.getStorageSync('currentSessionId');
+    console.log('Initial sessionId:', sessionId); // 验证存储值 
+    const counselorId = wx.getStorageSync('currentCounselorId');
+    const userId = wx.getStorageSync('userInfo').userId;
 
+    // 初始化ChatService
+    this.chatService = new ChatService(userId);
+    console.log(this.chatService);
+    this.chatService.subscribe('message', (msg) => {
+      this.handleIncomingMessage(msg);
+    });
+    this.chatService.subscribe('connected', this.handleConnectionSuccess.bind(this));
+    this.chatService.subscribe('disconnected', this.handleDisconnect.bind(this));
+    this.chatService.subscribe('error', this.handleError.bind(this));
+
+    this.setData({
+      counselorId,
+      sessionId,
+      userId,
+      ChatService
+    }, () => {
+      this.loadConsultantInfo();
+    });
+    console.log(sessionId);
   },
 
   // 加载咨询师信息
@@ -223,6 +248,7 @@ Page({
   }
   
     // 发送请求到后端
+    console.log(this.data.sessionId);
     wx.request({
       url: host + '/api/client/session/end',
       method: 'POST',
@@ -232,11 +258,14 @@ Page({
       },
       data: `sessionId=${this.data.sessionId}&rating=${this.data.rating}`,
       success: (res) => {
-
         if (res.statusCode === 200 && res.data.code === 1) {
           // 清除本地会话数据
+          wx.removeStorageSync('currentSessionId');
+          wx.removeStorageSync('currentCounselorId');
           wx.removeStorageSync('consultData');
           wx.showToast({ title: '咨询已结束' });
+          // 强制更新页面状态
+          this.setData({ currentConsultant: null });
           // 返回上一页或其他操作
           wx.switchTab({
             url: '/pages/Default/Index/Default_Index',
