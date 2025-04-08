@@ -1,4 +1,5 @@
 const app = getApp();
+const host = app.globalData.host;
 const ChatService = require("../../../utils/ChatService");
 Page({
   data: {
@@ -95,11 +96,11 @@ Page({
 
   //  过滤其他会话消息（接口文档要求 sessionId 匹配）
   if (msg.sessionId !== this.data.sessionId) return;
-
+  console.log(msg);
   //  处理时间戳格式容错
   let displayTime;
   try {
-    displayTime = this.formatTime(new Date(msg.time));
+    displayTime = this.formatTime(new Date(msg.createdAt));
   } catch (e) {
     displayTime = this.formatTime(new Date());
   }
@@ -194,6 +195,59 @@ Page({
     // if(this.data.client) {
     //   this.data.client.disconnect();
     // }
+  },
+
+  // 点击结束按钮
+  handleEndConsult() {
+    this.setData({ showConfirmDialog: true });
+  },
+
+  // 评分选择
+  handleRatingSelect(e) {
+    const rating = e.currentTarget.dataset.rating;
+    this.setData({ rating });
+  },
+
+  // 确认结束
+  handleConfirmEnd() {
+    if (this.data.rating === 0) {
+      wx.showToast({ title: '请先进行评分', icon: 'none' });
+      return;
+    }
+    const token = wx.getStorageSync('token');
+    console.log(this.data.sessionId);
+    // 发送请求到后端
+    wx.request({
+      url: host + '/api/client/session/end',
+      method: 'POST',
+      header:{
+        'token': token,
+        'content-type': 'application/x-www-form-urlencoded' 
+      },
+      data: `sessionId=${this.data.sessionId}&rating=${this.data.rating}`,
+      success: (res) => {
+        if (res.data.success) {
+          // 清除本地会话数据
+          wx.removeStorageSync('consultData');
+          wx.showToast({ title: '咨询已结束' });
+          // 返回上一页或其他操作
+          wx.navigateBack();
+        }
+      },
+      fail: () => {
+        wx.showToast({ title: '提交失败，请重试', icon: 'none' });
+      }
+    });
+
+    this.setData({ showConfirmDialog: false });
+  },
+
+  // 取消操作
+  handleCancel() {
+    this.setData({ 
+      showConfirmDialog: false,
+      rating: 0 
+    });
   },
 
   
