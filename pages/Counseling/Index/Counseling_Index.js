@@ -265,7 +265,10 @@ Page({
           wx.removeStorageSync('consultData');
           wx.showToast({ title: '咨询已结束' });
           // 强制更新页面状态
-          this.setData({ currentConsultant: null });
+          this.setData({ 
+            currentConsultant: null,
+            messages: []
+           });
           // 返回上一页或其他操作
           wx.switchTab({
             url: '/pages/Default/Index/Default_Index',
