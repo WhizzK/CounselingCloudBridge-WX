@@ -69,6 +69,7 @@ Page({
       },
       success: (res) => {
         if (res.data.code === 1) {
+          console.log(res.data);
           this.setData({
             currentConsultant: {
               counselorId: res.data.data.counselorId,
@@ -119,9 +120,13 @@ Page({
 
   // 发送消息
   sendMessage() {
-    const { inputValue, sessionId, counselorId, chatService } = this.data;
-    if (!inputValue.trim() || !chatService) return;
-
+    console.log('sendMessage');
+    const { inputValue, sessionId, counselorId} = this.data;
+    const chatService = this.chatService;
+    if (!inputValue.trim() || !chatService) {
+      console.log("error");
+      return;
+    }
     chatService.send(sessionId, counselorId, inputValue.trim());
     
     this.setData({
@@ -174,6 +179,12 @@ Page({
     return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
   },
 
+  onInput(e) {
+    this.setData({
+      inputValue: e.detail.value
+    });
+  },
+
   onUnload() {
     // 页面卸载时取消订阅
     if (this.data.chatService) {
@@ -184,6 +195,8 @@ Page({
     //   this.data.client.disconnect();
     // }
   },
+
+  
 
   // 保持其他原有方法不变...
   // ... handleEndConsult, handleRatingSelect, handleConfirmEnd, handleCancel 等方法 ...
