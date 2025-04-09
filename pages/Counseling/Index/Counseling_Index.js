@@ -52,6 +52,7 @@ Page({
     this.chatService.subscribe('disconnected', this.handleDisconnect.bind(this));
     this.chatService.subscribe('error', this.handleError.bind(this));
   },
+  
   // 加载咨询师信息
   loadConsultantInfo() {
     const token = wx.getStorageSync('token');
@@ -227,6 +228,7 @@ Page({
   }
   
     // 发送请求到后端
+    console.log(this.data.sessionId);
     wx.request({
       url: host + '/api/client/session/end',
       method: 'POST',
@@ -236,11 +238,17 @@ Page({
       },
       data: `sessionId=${this.data.sessionId}&rating=${this.data.rating}`,
       success: (res) => {
-
         if (res.statusCode === 200 && res.data.code === 1) {
           // 清除本地会话数据
+          wx.removeStorageSync('currentSessionId');
+          wx.removeStorageSync('currentCounselorId');
           wx.removeStorageSync('consultData');
           wx.showToast({ title: '咨询已结束' });
+          // 强制更新页面状态
+          this.setData({ 
+            currentConsultant: null,
+            messages: []
+           });
           // 返回上一页或其他操作
           wx.switchTab({
             url: '/pages/Default/Index/Default_Index',
