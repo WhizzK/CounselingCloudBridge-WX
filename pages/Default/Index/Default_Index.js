@@ -36,7 +36,7 @@ Page({
           // 处理空数组情况
           if (Array.isArray(res.data.data) && res.data.data.length > 0) {
             const therapists = res.data.data.map(item => ({
-              id: item.counselorld || 0,
+              id: item.counselorId,
               avatar: '../../..' + item.avatarUrl || '/images/default-avatar.png',
               name: item.realName || '未知咨询师',
               rating: item.rating || 0,
@@ -44,6 +44,11 @@ Page({
               experience: item.experience || 3, // 默认3年经验
               isFree: Boolean(item.isFree)
             }));
+
+            const newData = res.data?.data || [];
+            newData.forEach(counselor => {
+              wx.setStorageSync(`counselor_${counselor.counselorId}`, counselor);
+            });
             
             this.setData({ 
               therapists,
@@ -100,6 +105,7 @@ Page({
   // 导航到咨询师详情页面
   navToCounselorDetail(e) {
     const counselorId = e.currentTarget.dataset.id;
+    console.log(counselorId);
     wx.navigateTo({
       url: `/pages/Default/Counselor_Details/Counselor_Details?id=${counselorId}`,
     })
