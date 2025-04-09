@@ -13,17 +13,35 @@ Page({
     connected: false,
     sessionId: null,
     userId: null,
-    chatService: null
+    chatService: null,
+    canSend: false
   },
 
   onLoad(options) {
-    // 从路由参数或本地存储获取会话信息
-    console.log('onLoad');
-    const sessionId = options.sessionId || wx.getStorageSync('currentSessionId');
-    console.log('Initial sessionId:', sessionId); // 验证存储值
-    const userId = wx.getStorageSync('userInfo').userId;
-    const counselorId = options.counselorId || wx.getStorageSync('currentCounselorId');
+    
+  },
 
+  async onShow() {
+    console.log('onShow');
+    const userInfo = wx.getStorageSync('userInfo');
+    if(!userInfo){
+      console.log('用户未登录')
+      unLogin();
+      return;
+    }
+    this.initChatService(userInfo.userId);
+    this.loadConsultantInfo();
+    console.log('endOnShow');
+  },
+
+  onHide(){
+    console.log('onHide');
+    console.log(this.chatService);
+  },
+
+  initChatService(userId){
+    if(this.ChatService)
+      return;
     // 初始化ChatService
     this.chatService = new ChatService(userId);
     console.log(this.chatService);
@@ -33,32 +51,9 @@ Page({
     this.chatService.subscribe('connected', this.handleConnectionSuccess.bind(this));
     this.chatService.subscribe('disconnected', this.handleDisconnect.bind(this));
     this.chatService.subscribe('error', this.handleError.bind(this));
-
-    this.setData({
-      counselorId,
-      sessionId,
-      userId,
-      ChatService
-    }, () => {
-      this.loadConsultantInfo();
-    });
   },
-
-  onShow() {
-
-  },
-
   // 加载咨询师信息
   loadConsultantInfo() {
-    // 从本地缓存
-    //   const currentCounselorId = wx.getStorageSync('currentCounselorId');
-    //   console.log(currentCounselorId);
-    //   const currentConsultant = wx.getStorageSync(`counselor_${currentCounselorId}`);
-    //   console.log(currentConsultant);
-    //  this.setData({
-    //    currentConsultant: currentConsultant
-    //  });
-
     const token = wx.getStorageSync('token');
     // 从后端获取
     wx.request({
@@ -70,15 +65,24 @@ Page({
       },
       success: (res) => {
         if (res.data.code === 1) {
-          console.log(res.data);
-          this.setData({
-            currentConsultant: {
+          if(res.data.data){
+            console.log(res.data);
+            this.setData({
+              currentConsultant: {
+                counselorId: res.data.data.counselorId,
+                realName: res.data.data.realName,
+                avatarUrl: res.data.data.avatarUrl,
+              },
               counselorId: res.data.data.counselorId,
-              realName: res.data.data.realName,
-              avatarUrl: res.data.data.avatarUrl,
               sessionId: res.data.data.sessionId
-            }
-          });
+            });
+          }else{
+            console.log("不存在会话")
+            this.setData({
+              currentConsultant: null,
+              sessionId: null
+            });
+          }
         } else {
           wx.showToast({ title: res.data.msg, icon: 'none' });
         }
@@ -124,8 +128,8 @@ Page({
     console.log('sendMessage');
     const { inputValue, sessionId, counselorId} = this.data;
     const chatService = this.chatService;
-    if (!inputValue.trim() || !chatService) {
-      console.log("error");
+    if (!inputValue.trim() || !chatService || !sessionId || !counselorId) {
+      console.log("error,!inputValue:" + !inputValue.trim() + " !chatService:" + !chatService+ " sessionId:" + sessionId + ' counselorId:' + counselorId);
       return;
     }
     chatService.send(sessionId, counselorId, inputValue.trim());
@@ -264,3 +268,17 @@ Page({
   // 保持其他原有方法不变...
   // ... handleEndConsult, handleRatingSelect, handleConfirmEnd, handleCancel 等方法 ...
 });
+
+function unLogin() {
+  wx.showModal({
+    title: '未登录',
+    content: '是否前往登录',
+    complete: (res) => {
+      if (res.cancel) {
+      }
+
+      if (res.confirm) {
+      }
+    }
+  });
+}
