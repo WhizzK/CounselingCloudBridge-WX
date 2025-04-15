@@ -69,6 +69,7 @@ class ChatService {
         this._scheduleReconnect(); // 初始连接失败也触发重连
       }
     });
+    this._socketTask
   }
 
   _bindEvents() {
@@ -119,12 +120,13 @@ class ChatService {
     }, delay);
   }
 
-  send(sessionId, receiverId, content) {
+  send(sessionId, receiverId, content, type) {
     const payload = {
-      sessionId,
+      messageId: sessionId,
       senderId: this.userId,
       receiverId,
-      content
+      content,
+      type,
     };
 
     wx.sendSocketMessage({
