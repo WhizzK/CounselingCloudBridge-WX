@@ -8,27 +8,21 @@ Page({
     questionnaires: [
       {
         id: 1,
-        title: "焦虑自测",
-        description: "通过10个问题评估你的焦虑水平。",
-        icon: "/images/用户.png"
+        title: "抑郁自评量表（SDS）",
+        description: "通过20个问题评估你的抑郁程度。",
+        icon: "/icons/问卷.png"
       },
       {
         id: 2,
-        title: "抑郁自测",
-        description: "通过10个问题评估你的抑郁水平。",
-        icon: "/images/用户.png"
+        title: "焦虑自评量表（SAS）",
+        description: "通过20个问题评估你的焦虑水平。",
+        icon: "/icons/问卷.png"
       },
       {
         id: 3,
-        title: "压力自测",
-        description: "通过10个问题评估你的压力水平。",
-        icon: "/images/用户.png"
-      },
-      {
-        id: 4,
-        title: "孤独自测",
-        description: "通过10个问题评估你的孤独水平。",
-        icon: "/images/用户.png"
+        title: "心理健康自评问卷（SRQ-20）",
+        description: "通过20个问题评估你的心理状态。",
+        icon: "/icons/问卷.png"
       }
     ]
   },
@@ -36,8 +30,12 @@ Page({
   // 处理问卷点击事件
   handleQuestionnaireTap: function (event) {
     const questionnaireId = event.currentTarget.dataset.id;
+    const quizType = `Quiz${questionnaireId}`;
+    console.log(questionnaireId);
+    console.log(quizType);
+    console.log(`/pages/Default/${quizType}/${quizType}`);
     wx.navigateTo({
-      url: `/pages/Default/Quiz/Quiz?id=${questionnaireId}`
+      url: `/pages/Default/${quizType}/${quizType}`
     });
   },
   /**

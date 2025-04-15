@@ -1,0 +1,22 @@
+<!--pages/Default/Quiz_Result.wxml-->
+<view class="result-container">
+
+  <view class="score-box">
+    <text>测试分数：{{score}}</text>
+  </view>
+
+  <view class="score-box">
+    <text>自测结果：{{result}}</text>
+  </view>
+
+  <view class="tips">
+    <text>注意事项：\n</text>
+    <text>1. 本结果仅供参考，不能替代专业诊断\n</text>
+    <text>2. 若持续情绪低落，建议联系心理咨询师</text>
+  </view>
+
+  <view>
+    <button class="botton" bindtap="navToHome">返回主页</button>
+  </view>
+
+</view>

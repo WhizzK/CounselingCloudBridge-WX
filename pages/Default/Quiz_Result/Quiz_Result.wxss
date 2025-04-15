@@ -1,0 +1,51 @@
+/* pages/Default/Quiz_Result.wxss */
+.result-container {
+  padding: 30rpx;
+  min-height: 100vh;
+  background: #f5f5f5; /* 浅灰背景 */
+}
+
+/* 卡片样式 */
+.score-box {
+  background: white;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05); /* 柔和阴影 */
+}
+
+/* 文字样式 */
+.score-box text {
+  display: block;
+  font-size: 32rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* 注意事项卡片 */
+.tips {
+  background: white;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin: 40rpx 0;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.tips text {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 10rpx;
+}
+
+/* 按钮容器优化 */
+.result-container > view:last-child {
+  padding: 0 30rpx;
+}
+
+.botton{
+  background: #07c160;
+  color: white;
+  margin-top: 20rpx;
+}

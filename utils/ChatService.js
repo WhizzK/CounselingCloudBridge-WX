@@ -1,133 +1,162 @@
-export class ChatService {
-  constructor(userId) {
-    this.userId = userId; // 新增用户标识
-    this._connection = null; // 主连接实例
-    this._emitter = new SessionEmitter(userId);
-    this._pendingQueue = []; // 全局待处理队列
-    this._setupConnection();
-  }
-
-  // 初始化WebSocket连接
-  _setupConnection() {
-    console.log("connecting....");
-    this._connection = new WebSocket(`ws://localhost:8090/chat/${this.userId}`);
-    console.log("connected....");
-    this._connection.onopen = () => {
-      this._emitter.emit('connected');
-      this._flushPendingQueue();
-    };
-
-    this._connection.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      this._emitter.emit('message', {
-        roomId: data.roomId,
-        type : data.type,
-        senderId: data.senderId,
-        content: data.content,
-        createdAt: data.createdAt,
-      });
-    };
-
-    this._connection.onclose = () => {
-      this._emitter.emit('disconnected');
-    };
-
-    this._connection.onerror = (error) => {
-      this._emitter.emit('error', error);
-    };
-  }
-
-  // 订阅事件
-  subscribe(eventType, handler) {
-    if (this.isConnected) {
-      this._emitter.on(eventType, handler);
-    } else {
-      this._pendingQueue.push({ type: 'subscribe', data: { eventType, handler } });
-    }
-    return this;
-  }
-
-  // 发送消息
-  send(roomId, receiverId, content, type) {
-    const payload = {
-      roomId : roomId,
-      senderId : this.userId,
-      receiverId : receiverId,
-      content : content,
-      type: type
-    };
-
-    if (this.isConnected) {
-      this._connection.send(JSON.stringify(payload));
-    } else {
-      this._pendingQueue.push({ type: 'send', data: payload });
-    }
-    return this;
-  }
-
-  // 关闭连接
-  destroy() {
-    if (this._connection) {
-      this._connection.close();
-      this._emitter.destroy();
-      this._pendingQueue = [];
-    }
-  }
-
-  // 处理等待队列
-  _flushPendingQueue() {
-    this._pendingQueue.forEach(item => {
-      if (item.type === 'send') {
-        this._connection.send(JSON.stringify(item.data));
-      } else {
-        this._emitter.on(item.data.eventType, item.data.handler);
-      }
-    });
-    this._pendingQueue = [];
-  }
-
-  // 连接状态
-  get isConnected() {
-    return this._connection?.readyState === WebSocket.OPEN;
-  }
-}
-
 class SessionEmitter {
   constructor(userId) {
     this.userId = userId;
-    this.handlers = new Map();
+    this._events = new Map(); // 存储事件回调 { eventName: [callback1, callback2] }
   }
 
-  on(eventType, handler) {
-    const handlers = this.handlers.get(eventType) || new Set();
-    handlers.add(handler);
-    this.handlers.set(eventType, handlers);
+  // 订阅事件
+  subscribe(event, callback) {
+    if (!this._events.has(event)) {
+      this._events.set(event, []);
+    }
+    this._events.get(event).push(callback);
   }
 
-  emit(eventType, data) {
-    const handlers = this.handlers.get(eventType);
-    if (handlers) {
-      handlers.forEach(handler => handler({ ...data, userId: this.userId }));
+  // 触发事件
+  emit(event, ...args) {
+    if (this._events.has(event)) {
+      this._events.get(event).forEach(callback => {
+        try {
+          callback(...args);
+        } catch (err) {
+          console.error(`Event ${event} handler error:`, err);
+        }
+      });
     }
   }
 
-  destroy() {
-    this.handlers.clear();
+  // 取消订阅
+  unsubscribe(event, callback) {
+    if (this._events.has(event)) {
+      const callbacks = this._events.get(event).filter(cb => cb !== callback);
+      this._events.set(event, callbacks);
+    }
   }
 }
 
-// // 传入当前userId
-// chatService = new ChatService (senderId);
-// //注册接收消息时候的处理事件
-// chatService.subscribe('message', (msg) => {
-//   console.log(msg.roomId);       //这里roomId等于sessionId或者requestId
-//   console.log(msg.type);         //这里type等于request或者session
-//   console.log(msg.senderId);
-//   console.log(msg.content);
-//   console.log(msg.createdAt);
-// })
-// //发送消息
-// chatService.send(roomId,receiverId,content, type);
-module.exports = {
-  ChatService
+class ChatService {
+  constructor(userId) {
+    this.userId = userId;
+    this._emitter = new SessionEmitter(userId);
+    this._reconnectAttempts = 0; // 记录重连次数
+    this._maxReconnectAttempts = 5; // 最大重连次数
+    this._reconnectTimer = null; // 重连计时器
+    this._isManualClose = false; // 标记是否为主动关闭
+    this._setupConnection();
+  }
+  
+  // 新增订阅方法
+  subscribe(event, callback) {
+    this._emitter.subscribe(event, callback);
+  }
+
+  // 新增取消订阅方法（可选）
+  unsubscribe(event, callback) {
+    this._emitter.unsubscribe(event, callback);
+  }
+
+  _setupConnection() {
+    // 1. 创建 WebSocket 连接
+    this._socketTask = wx.connectSocket({
+      url: `ws://localhost:8080/chat/${this.userId}`,
+      success: () => {
+        console.log("Socket 连接创建成功");
+        this._bindEvents();
+      },
+      fail: (err) => {
+        console.error("连接失败:", err);
+        this._emitter.emit('error', err);
+        this._scheduleReconnect(); // 初始连接失败也触发重连
+      }
+    });
+    this._socketTask
+  }
+
+  _bindEvents() {
+    // 2. 监听连接打开
+    wx.onSocketOpen(() => {
+      console.log("WebSocket 连接已打开");
+      this._reconnectAttempts = 0;
+      this._emitter.emit('connected');
+    });
+
+    // 3. 监听消息
+    wx.onSocketMessage((res) => {
+      try {
+        const data = JSON.parse(res.data);
+        this._emitter.emit('message', data);
+      } catch (err) {
+        this._emitter.emit('error', err);
+      }
+    });
+
+    // 4. 监听错误
+    wx.onSocketError((err) => {
+      console.error("Socket 错误:", err);
+      this._emitter.emit('error', err);
+    });
+
+    // 5. 监听关闭
+    wx.onSocketClose(() => {
+      console.log("WebSocket 连接已关闭");
+      this._emitter.emit('disconnected');
+
+      // 非主动关闭时触发重连
+      if (!this._isManualClose) this._scheduleReconnect();
+    });
+  }
+
+  _scheduleReconnect() {
+    if (this._reconnectAttempts >= this._maxReconnectAttempts) {
+      console.error("已达最大重连次数，放弃连接");
+      return;
+    }
+
+    const delay = Math.pow(2, this._reconnectAttempts) * 1000;
+    this._reconnectTimer = setTimeout(() => {
+      console.log(`尝试第 ${this._reconnectAttempts + 1} 次重连...`);
+      this._setupConnection();
+      this._reconnectAttempts++;
+    }, delay);
+  }
+
+  send(sessionId, receiverId, content, type) {
+    const payload = {
+      messageId: sessionId,
+      senderId: this.userId,
+      receiverId,
+      content,
+      type,
+    };
+
+    wx.sendSocketMessage({
+      data: JSON.stringify(payload),
+      success: () => {
+        console.log("消息已发送");
+      },
+      fail: (err) => {
+        this._emitter.emit('error', err);
+      }
+    });
+  }
+
+  destroy() {
+    this._isManualClose = true;
+    if (this._reconnectTimer) clearTimeout(this._reconnectTimer);
+    wx.closeSocket();
+  }
 }
+
+module.exports = ChatService;
+  
+  // // 传入当前userId
+  // sessionManager = new ChatService (senderId);
+  // //注册接收消息时候的处理事件
+  // sessionManager.subscribe('message', (msg) => {
+  //   console.log(msg.sessionId);
+  //   console.log(msg.senderId);
+  //   console.log(msg.content);
+  //   console.log(msg.createdAt);
+  // })
+  // //发送消息
+  // sessionManager.send(sessionId,receiverId,content);
