@@ -133,7 +133,7 @@ Page({
       console.log("error,!inputValue:" + !inputValue.trim() + " !chatService:" + !chatService+ " sessionId:" + sessionId + ' counselorId:' + counselorId);
       return;
     }
-    chatService.send(sessionId, counselorId, inputValue.trim());
+    chatService.send(sessionId, counselorId, inputValue.trim(),"session");
     
     this.setData({
       inputValue: '',
@@ -283,9 +283,15 @@ function unLogin() {
     content: '是否前往登录',
     complete: (res) => {
       if (res.cancel) {
+        wx.navigateTo({
+          url: '/pages/User/Login/Login',
+        })
       }
 
       if (res.confirm) {
+        wx.switchTab({
+          url: '/pages/Default/Index/Default_Index.js',
+        })
       }
     }
   });
