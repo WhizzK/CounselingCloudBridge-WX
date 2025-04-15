@@ -16,7 +16,8 @@
     "pages/User/ChangePassword/ChangePassword",
     "pages/Default/Counselor_Details/Counselor_Details",
     "pages/Default/Quiz_Result/Quiz_Result",
-    "pages/Default/Quiz2/Quiz2"
+    "pages/Default/Quiz2/Quiz2",
+    "pages/Default/Quiz3/Quiz3"
   ],
   "window": {
     "navigationBarTextStyle": "black",

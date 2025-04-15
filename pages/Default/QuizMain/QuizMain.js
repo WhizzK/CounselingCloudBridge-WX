@@ -20,7 +20,7 @@ Page({
       },
       {
         id: 3,
-        title: "心理健康自评问卷",
+        title: "心理健康自评问卷（SRQ-20）",
         description: "通过20个问题评估你的心理状态。",
         icon: "/icons/问卷.png"
       }
