@@ -2,11 +2,11 @@
 <view class="result-container">
 
   <view class="score-box">
-    <text>标准分：{{score}}</text>
+    <text>测试分数：{{score}}</text>
   </view>
 
   <view class="score-box">
-    <text>自测结果: {{result}}</text>
+    <text>自测结果：{{result}}</text>
   </view>
 
   <view class="tips">

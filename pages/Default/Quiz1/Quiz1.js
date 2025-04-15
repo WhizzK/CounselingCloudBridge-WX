@@ -25,7 +25,7 @@ const questions = [
 Page({
   data: {
     questions: questions.map(q => ({...q, options: [
-      "很少或没有", "有时有", "经常有", "持续如此"
+      "很少或没有", "有时有", "经常有", "总是如此"
     ]})),
     answers: new Array(20).fill(null), // 存储用户选择
     completedCount: 0 // 新增计算属性
@@ -73,9 +73,9 @@ Page({
     // 计算标准分
     const standardScore = Math.round(total * 1.25);
     let result = '';
-    if (standardScore < 53) result = '无抑郁倾向';
-    else if (standardScore < 63) result = '轻度抑郁';
-    else if (standardScore < 73) result = '中度抑郁';
+    if (standardScore < 50) result = '无抑郁倾向';
+    else if (standardScore < 59) result = '轻度抑郁';
+    else if (standardScore < 69) result = '中度抑郁';
     else result = '重度抑郁';
     console.log(standardScore);
     console.log(result);

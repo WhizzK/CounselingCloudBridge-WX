@@ -1,2 +1,29 @@
 <!--pages/Default/Quiz2/Quiz2.wxml-->
-<text>pages/Default/Quiz2/Quiz2.wxml</text>
+<scroll-view class="container" scroll-y>
+  <!-- 进度提示 -->
+  <view class="progress">已完成 {{completedCount}}/20 题</view>
+
+  <!-- 题目列表 -->
+  <block wx:for="{{questions}}" wx:key="id">
+  <view class="question-box">
+    <!-- 题目文本 -->
+    <text>{{index + 1}}. {{item.text}}</text>
+
+    <!-- 选项按钮 -->
+    <view class="options">
+      <block wx:for="{{item.options}}" wx:for-index="optionIndex" wx:key="*this">
+      <button 
+      class="option-btn {{answers[index] === optionIndex+1 ? 'active' : ''}}" 
+        data-index="{{index}}" 
+        data-option="{{optionIndex}}" 
+        bindtap="handleSelect"
+      >
+        {{item}}
+      </button>
+      </block>
+    </view>
+  </view>
+  </block>
+
+  <button class="submit-btn" bindtap="calculateScore">查看结果</button>
+</scroll-view>
