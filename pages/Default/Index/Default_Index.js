@@ -41,7 +41,7 @@ Page({
               name: item.realName || '未知咨询师',
               rating: item.rating || 0,
               expertise: item.expertise ? '擅长：' + item.expertise : '专业领域待补充',
-              experience: item.experience || 3, // 默认3年经验
+              yearsExperience: item.yearsExperience || 3, // 默认3年经验
               isFree: Boolean(item.isFree)
             }));
 
