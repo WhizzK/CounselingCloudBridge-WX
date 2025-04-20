@@ -19,12 +19,12 @@
     <view class="divider"></view>
     
     <view class="profile-stats">
-      <!-- <view class="stat-item">
-        <text class="stat-value">{{counselor.experienceYears}}+</text>
-        <text class="stat-label">年经验</text>
-      </view> -->
       <view class="stat-item">
-        <text class="stat-value">{{counselor.sessionCount}}+</text>
+        <text class="stat-value">{{counselor.yearsExperience}}+</text>
+        <text class="stat-label">年经验</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{totalSessions}}+</text>
         <text class="stat-label">次咨询</text>
       </view>
       <view class="stat-item">
@@ -43,10 +43,10 @@
   </view>
   
   <!-- 个人简介卡片 -->
-  <!-- <view class="info-card">
+  <view class="info-card">
     <view class="card-title">个人简介</view>
-    <view class="bio-content">{{counselor.bio}}</view>
-  </view> -->
+    <view class="bio-content">{{bio}}</view>
+  </view>
   
   <!-- 底部固定咨询按钮 -->
   <view class="footer">

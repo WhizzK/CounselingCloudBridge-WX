@@ -56,7 +56,7 @@
               <text class="rating">⭐{{item.rating || '0.0'}}</text>
             </view>
             <text class="expertise">{{item.expertise || '擅长领域待补充'}}</text>
-            <text class="experience">{{item.experience || '0'}}年经验</text>
+            <text class="experience">{{item.yearsExperience}}年经验</text>
           </view>
         </view>
       </block>

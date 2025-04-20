@@ -37,7 +37,7 @@
             <text class="rating">⭐{{item.rating}}</text>
           </view>
           <text class="expertise">{{item.expertise}}</text>
-          <text class="experience">{{item.experience}}年经验</text>
+          <text class="experience">{{item.yearsExperience}}年经验</text>
         </view>
       </view>
     </block>

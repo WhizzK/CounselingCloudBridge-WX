@@ -6,22 +6,33 @@ Page({
     showAgreement: false,  // 控制弹窗显示
     hasAgreed: false,      // 是否同意协议
     counselor: {
-    }
+    },
+    totalSessions: 0,
+    bio: '',
   },
 
   onLoad: function(options) {
     // 这里可以通过options.id获取咨询师ID，然后从服务器获取数据
-    // this.loadConsultantData(options.id);
   },
 
   loadConsultantData: function(id) {
     // 实际项目中这里应该是从服务器获取数据
+    const token = wx.getStorageSync('token');
     wx.request({
-      url: 'https://your-api.com/consultants/' + id,
+      url: app.globalData.host + '/api/client/counselor/' + id,
+      method: 'GET',
+      header: {
+        'token': token,
+        'content-type': 'application/json'
+      },
       success: (res) => {
+        console.log(res.data);
         this.setData({
-          consultant: res.data
+          totalSessions: res.data.data.totalSessions,
+          bio: res.data.data.bio
         });
+        console.log(this.data.totalSessions);
+        console.log(this.data.bio);
       }
     });
   },
@@ -86,6 +97,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.loadConsultantData(options.id);
     const counselorId = options.id;
     console.log(counselorId);
     // 从缓存读取
